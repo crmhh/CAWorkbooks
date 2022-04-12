@@ -1,0 +1,2212 @@
+{
+version: "Notebook/1.0",
+items: [
+{
+type: 1,
+content: {
+json: "# Conditional Access compare
+"
+},
+customWidth: "60",
+name: "text - 5"
+},
+{
+type: 9,
+content: {
+version: "KqlParameterItem/1.0",
+parameters: [
+{
+id: "dc99b5b7-d991-4269-8694-c4f8675b03ee",
+version: "KqlParameterItem/1.0",
+name: "Workspace",
+type: 5,
+isRequired: true,
+multiSelect: true,
+quote: "'",
+delimiter: ",",
+value: [
+"value::all"
+],
+typeSettings: {
+resourceTypeFilter: {
+microsoft.operationalinsights/workspaces: true
+},
+additionalResourceOptions: [
+"value::all"
+]
+},
+timeContext: {
+durationMs: 0
+},
+timeContextFromParameter: "TimeRange"
+},
+{
+id: "47fd452d-caed-4c60-9f58-001b2a8f4e24",
+version: "KqlParameterItem/1.0",
+name: "Guide",
+type: 10,
+isRequired: true,
+typeSettings: {
+additionalResourceOptions: [ ],
+showDefault: false
+},
+jsonData: "[
+    {"value": "On", "label": "On", "selected":true},
+    {"value": "Off", "label": "Off"}
+]"
+}
+],
+style: "pills",
+queryType: 0,
+resourceType: "microsoft.operationalinsights/workspaces"
+},
+customWidth: "40",
+name: "parameters - 24"
+},
+{
+type: 1,
+content: {
+json: "This workbook helps you to compare the difference between a productive and a report policy.
+The main use case is to see the impact of an extension of the scope of the policy to eg. All Users.
+
+### Steps to use this workbook
+1. Choose your productive policy
+2. Create a new Conditional Access policy in [report-only mode](https://docs.microsoft.com/azure/active-directory/conditional-access/concept-conditional-access-report-only) as a copy of your policy with an extended scope.
+3. In this report, select the PROD policy from the Conditional Access policy parameter and the REPORT policy to see the compared impact summary. 
+4. Click on a result tile to filter the report by success, failure, user action required, or not applied sign-ins. 
+5. Verify whether the policy is acting as intended by looking at the breakdown per condition and sign-in status. 
+6. Extend the scope of the policy to prepare the switch to All Users 
+"
+},
+conditionalVisibility: {
+parameterName: "Guide",
+comparison: "isEqualTo",
+value: "On"
+},
+name: "Getting started"
+},
+{
+type: 1,
+content: {
+json: "For tenants with high volume of sign-ins, this workbook may not support filtering by time ranges longer than 24 hours. Microsoft recommends using the [Conditional Access overview](https://aka.ms/ca_overview) dashboard instead.",
+style: "info"
+},
+name: "text - 14"
+},
+{
+type: 11,
+content: {
+version: "LinkItem/1.0",
+style: "tabs",
+links: [
+{
+id: "54488ef3-321b-4eee-9670-f57303cb4265",
+cellValue: "identityType",
+linkTarget: "parameter",
+linkLabel: "User sign-ins",
+subTarget: "user",
+preText: "User sign-ins",
+style: "link"
+},
+{
+id: "08b8034b-b2f0-4ed2-8c28-dc6d79af1c3b",
+cellValue: "identityType",
+linkTarget: "parameter",
+linkLabel: "Service principal sign-ins",
+subTarget: "servicePrincipal",
+style: "link"
+}
+]
+},
+name: "links - 29"
+},
+{
+type: 9,
+content: {
+version: "KqlParameterItem/1.0",
+parameters: [
+{
+id: "5441273f-af1c-49f3-ac63-2e56253ecd45",
+version: "KqlParameterItem/1.0",
+name: "SigninLogs",
+type: 1,
+query: "SigninLogs | take 1",
+crossComponentResources: [
+"{Workspace}"
+],
+isHiddenWhenLocked: true,
+timeContext: {
+durationMs: 86400000
+},
+queryType: 0,
+resourceType: "microsoft.operationalinsights/workspaces"
+},
+{
+id: "dfade4d2-db09-451b-9fcc-0774a6999289",
+version: "KqlParameterItem/1.0",
+name: "AADServicePrincipalSignInLogs",
+type: 1,
+query: "AADServicePrincipalSignInLogs | take 1",
+isHiddenWhenLocked: true,
+timeContext: {
+durationMs: 86400000
+},
+queryType: 0,
+resourceType: "microsoft.operationalinsights/workspaces"
+}
+],
+style: "pills",
+queryType: 0,
+resourceType: "microsoft.operationalinsights/workspaces"
+},
+name: "parameters - 12"
+},
+{
+type: 1,
+content: {
+json: "In order to view user sign-ins, ensure that Diagnostic Settings are configured to send SignInLogs to your log analytics workspace. [Learn more](https://docs.microsoft.com/azure/active-directory/reports-monitoring/howto-integrate-activity-logs-with-log-analytics). ",
+style: "warning"
+},
+conditionalVisibility: {
+parameterName: "SigninLogs",
+comparison: "isEqualTo"
+},
+name: "text - 11"
+},
+{
+type: 1,
+content: {
+json: "In order to view service prinicpal sign-ins, ensure that Diagnostic Settings are configured to send ServicePrincipalSignInLogs to your log analytics workspace. [Learn more](https://docs.microsoft.com/azure/active-directory/reports-monitoring/howto-integrate-activity-logs-with-log-analytics). ",
+style: "warning"
+},
+conditionalVisibility: {
+parameterName: "AADServicePrincipalSignInLogs",
+comparison: "isEqualTo"
+},
+name: "text - 11 - Copy"
+},
+{
+type: 3,
+content: {
+version: "KqlItem/1.0",
+query: "{"version":"1.0.0","content":"[\r\n   {\r\n      \"id\":\"All\",\r\n      \"name\":\"All enabled policies\",\r\n\t\t\"group\": \"Select all enabled policies\"\r\n   }\r\n]","transformers":null}",
+size: 4,
+queryType: 8
+},
+conditionalVisibility: {
+parameterName: "1",
+comparison: "isEqualTo",
+value: "2"
+},
+name: "Static all enabled policies"
+},
+{
+type: 3,
+content: {
+version: "KqlItem/1.0",
+query: "{"version":"MsGraphEndpoint/1.0","data":null,"headers":[],"method":"GETARRAY","path":"/beta/identity/conditionalAccess/policies?$filter=state eq 'enabled'","urlParams":[],"transformers":[{"type":"jsonpath","settings":{"columns":[{"path":"$.id","columnid":"id"},{"path":"$.displayName","columnid":"name"},{"path":"$.id","columnid":"group","columnType":"string","substringRegexMatch":".*","substringReplace":"Select individual enabled policy"}]}}]}",
+size: 4,
+queryType: 14
+},
+conditionalVisibility: {
+parameterName: "1",
+comparison: "isEqualTo",
+value: "2"
+},
+name: "Graph call enabled"
+},
+{
+type: 3,
+content: {
+version: "KqlItem/1.0",
+query: "{"version":"MsGraphEndpoint/1.0","data":null,"headers":[],"method":"GETARRAY","path":"/beta/identity/conditionalAccess/policies?$filter=state eq 'enabledForReportingButNotEnforced'","urlParams":[],"transformers":[{"type":"jsonpath","settings":{"columns":[{"path":"$.id","columnid":"id"},{"path":"$.displayName","columnid":"name"},{"path":"$.id","columnid":"group","columnType":"string","substringRegexMatch":".*","substringReplace":"Select individual report-only policy"}]}}]}",
+size: 4,
+queryType: 14
+},
+conditionalVisibility: {
+parameterName: "1",
+comparison: "isEqualTo",
+value: "2"
+},
+name: "Graph call report-only"
+},
+{
+type: 9,
+content: {
+version: "KqlParameterItem/1.0",
+parameters: [
+{
+id: "4f68d9a1-025d-42c5-b54f-3c67f4d9e678",
+version: "KqlParameterItem/1.0",
+name: "policy",
+label: "Conditional Access policy",
+type: 2,
+isRequired: true,
+query: "{"version":"Merge/1.0","merges":[{"id":"708de73f-4410-4068-9cc0-43b6678a5066","mergeType":"table","leftTable":"Graph call enabled"}],"projectRename":[{"originalName":"id","mergedName":"id","fromId":"unknown"},{"originalName":"name","mergedName":"name","fromId":"unknown"},{"originalName":"group","mergedName":"group","fromId":"unknown"},{"originalName":"[Graph call enabled].id","mergedName":"id1","fromId":"708de73f-4410-4068-9cc0-43b6678a5066"},{"originalName":"[Graph call enabled].name","mergedName":"name1","fromId":"708de73f-4410-4068-9cc0-43b6678a5066"},{"originalName":"[Graph call enabled].group","mergedName":"group1","fromId":"708de73f-4410-4068-9cc0-43b6678a5066"}]}",
+value: "b4f4e178-226d-446e-8a83-134077fdb024",
+typeSettings: {
+additionalResourceOptions: [ ],
+showDefault: false
+},
+queryType: 7
+},
+{
+version: "KqlParameterItem/1.0",
+name: "reportpolicy",
+type: 2,
+isRequired: true,
+query: "{"version":"Merge/1.0","merges":[{"id":"16860d19-1ebd-4122-89d1-da8a9b6f1252","mergeType":"table","leftTable":"Graph call report-only"}],"projectRename":[{"originalName":"[Graph call report-only].id","mergedName":"id","fromId":"16860d19-1ebd-4122-89d1-da8a9b6f1252"},{"originalName":"[Graph call report-only].name","mergedName":"name","fromId":"16860d19-1ebd-4122-89d1-da8a9b6f1252"},{"originalName":"[Graph call report-only].group","mergedName":"group","fromId":"16860d19-1ebd-4122-89d1-da8a9b6f1252"}]}",
+value: "f0b2a335-6fca-4bb2-a77e-47aef15517f0",
+typeSettings: {
+additionalResourceOptions: [ ],
+showDefault: false
+},
+queryType: 7,
+id: "e9f76597-c8d9-4b21-8b6d-63121b184262"
+},
+{
+id: "17196e4b-f291-46a5-9e00-0b5e0d8943e8",
+version: "KqlParameterItem/1.0",
+name: "TimeRange",
+label: "Time range",
+type: 4,
+isRequired: true,
+value: {
+durationMs: 1800000
+},
+typeSettings: {
+selectableValues: [
+{
+durationMs: 1800000
+},
+{
+durationMs: 3600000
+},
+{
+durationMs: 14400000
+},
+{
+durationMs: 43200000
+},
+{
+durationMs: 86400000
+},
+{
+durationMs: 172800000
+},
+{
+durationMs: 259200000
+},
+{
+durationMs: 604800000
+},
+{
+durationMs: 1209600000
+},
+{
+durationMs: 2419200000
+},
+{
+durationMs: 2592000000
+},
+{
+durationMs: 5184000000
+},
+{
+durationMs: 7776000000
+}
+],
+allowCustom: true
+}
+},
+{
+id: "93cfc5e1-92f3-43a3-aad5-dc7fc507eb57",
+version: "KqlParameterItem/1.0",
+name: "User",
+type: 1,
+description: "Exact match on full user principal name (e.g. user@domain.com). Default value is "All users"",
+value: "All users",
+timeContext: {
+durationMs: 0
+},
+timeContextFromParameter: "TimeRange"
+},
+{
+id: "60a4d33d-0d73-47e8-a32d-6798d0f5730e",
+version: "KqlParameterItem/1.0",
+name: "App",
+type: 1,
+description: "Exact match on app display name. Default value is "All apps"",
+value: "All apps",
+timeContext: {
+durationMs: 86400000
+},
+timeContextFromParameter: "TimeRange"
+},
+{
+id: "db042271-d62d-45ee-ab7f-56fef70dc459",
+version: "KqlParameterItem/1.0",
+name: "unit",
+label: "Data view",
+type: 2,
+description: "Display results by number of users or number of sign-ins",
+isRequired: true,
+query: "let unit = datatable(label:string,units:string)
+["users", "|",
+ "sign-ins","//"];
+unit 
+| project Value = units, Label = label",
+crossComponentResources: [
+"{Workspace}"
+],
+value: "|",
+typeSettings: {
+additionalResourceOptions: [ ]
+},
+queryType: 0,
+resourceType: "microsoft.operationalinsights/workspaces"
+}
+],
+style: "pills",
+queryType: 7
+},
+conditionalVisibility: {
+parameterName: "identityType",
+comparison: "isEqualTo",
+value: "user"
+},
+name: "parameters - 1"
+},
+{
+type: 12,
+content: {
+version: "NotebookGroup/1.0",
+groupType: "editable",
+items: [
+{
+type: 1,
+content: {
+json: "## Impact summary
+💡 *Click on the tiles below to filter the report by the selected Conditional Access result.*"
+},
+name: "text - 21"
+},
+{
+type: 1,
+content: {
+json: "**Total**: Number of {unit:label} in the {TimeRange}</br>
+**Success**: Number of {unit:label} where the selected polic(ies) granted access and the required controls were satisifed</br>
+**Failure**: Number of {unit:label} where the selected polic(ies) denied access and the required controls were not satisfied</br>
+**User action required**: Number of {unit:label} where the selected report-only policy applied but user action (e.g. MFA or Terms of Use) would be required if the policy were enabled.</br>
+**Not applied**: Number of {unit:label} that are bypassing the selected polic(ies) because the sign-in did not match at least one of the assignments or conditions. "
+},
+conditionalVisibility: {
+parameterName: "Guide",
+comparison: "isEqualTo",
+value: "On"
+},
+name: "Instructions 1"
+},
+{
+type: 3,
+content: {
+version: "KqlItem/1.0",
+query: "let prod = (
+    AADNonInteractiveUserSignInLogs
+    | where TimeGenerated {TimeRange:value}
+    | project ConditionalAccessPolicies, UserPrincipalName, AppDisplayName
+    | where ConditionalAccessPolicies != "[]"
+    | where "{User:escape}" == "All users" or UserPrincipalName has "{User:escape}"
+    | where "{App:escape}" == "All apps" or AppDisplayName has "{App:escape}"
+    | project-away AppDisplayName
+    | mv-expand todynamic(ConditionalAccessPolicies)
+    | where ConditionalAccessPolicies["id"] == "{policy:escape}"
+    | where ConditionalAccessPolicies.result <> "notApplied" );
+let report = (
+    AADNonInteractiveUserSignInLogs
+    | where TimeGenerated {TimeRange:value}
+    | project ConditionalAccessPolicies, UserPrincipalName, AppDisplayName
+    | where ConditionalAccessPolicies != "[]"
+    | where "{User:escape}" == "All users" or UserPrincipalName has "{User:escape}"
+    | where "{App:escape}" == "All apps" or AppDisplayName has "{App:escape}"
+    | project-away AppDisplayName
+    | mv-expand todynamic(ConditionalAccessPolicies)
+    | where ConditionalAccessPolicies["id"] == "{reportpolicy:escape}"
+    | where ConditionalAccessPolicies.result <> "reportOnlyNotApplied"
+    | extend result = ConditionalAccessPolicies["result"]
+    | project-away ConditionalAccessPolicies);
+//
+//
+// Total
+prod | join kind=rightanti (report) on UserPrincipalName
+| summarize count() by UserPrincipalName
+| summarize count()
+| extend
+    resultName = "Total",
+    unit = case("|" == "//", "sign-ins", "users"),
+    statusCode = 1
+// 
+//
+// Number of success/failure/user action required/not applied
+| union (
+    prod | join kind=rightanti (report) on UserPrincipalName
+    | extend resultName = case(result == "success" or result == "reportOnlySuccess", "Success", result == "failure" or result == "reportOnlyFailure", "Failure", result == "interrupt" or result == "reportOnlyInterrupted", "User action required", "Not applied")
+    | extend statusCode = case(resultName == "Success", 2, resultName == "Failure", 3, resultName == "User action required", 4, 5)
+    | summarize count() by resultName, UserPrincipalName, statusCode
+    | summarize count() by resultName, statusCode
+    | extend unit = case("|" == "//", "sign-ins", "users")
+    )
+//
+// Case if result count is 0
+| join kind = fullouter (
+    datatable (resultName: string, statusCode1: string) [
+    "Total", 1,
+    "Success", 2,
+    "Failure", 3,
+    "User action required", 4,
+    "Not applied", 5
+]
+    )
+    on resultName
+| extend
+    resultName = iff(resultName == '', resultName1, resultName),
+    count_ = iff(resultName == '', 0, count_),
+    unit = "users",
+    statusCode1
+| project-away resultName1
+| sort by statusCode1 asc",
+size: 3,
+showAnalytics: true,
+timeContext: {
+durationMs: 604800000
+},
+exportFieldName: "resultName",
+exportParameterName: "resultName",
+exportDefaultValue: "Total",
+showExportToExcel: true,
+queryType: 0,
+resourceType: "microsoft.operationalinsights/workspaces",
+crossComponentResources: [
+"{Workspace}"
+],
+visualization: "tiles",
+tileSettings: {
+titleContent: {
+columnMatch: "resultName",
+formatter: 1,
+formatOptions: {
+showIcon: true
+}
+},
+leftContent: {
+columnMatch: "count_",
+formatter: 12,
+formatOptions: {
+palette: "auto",
+showIcon: true
+},
+numberFormat: {
+unit: 17,
+options: {
+maximumSignificantDigits: 3,
+maximumFractionDigits: 2
+}
+}
+},
+secondaryContent: {
+columnMatch: "unit",
+formatter: 1,
+formatOptions: {
+showIcon: true
+}
+},
+showBorder: true
+}
+},
+conditionalVisibility: {
+parameterName: "policy",
+comparison: "isNotEqualTo",
+value: "All"
+},
+name: "query - 56"
+},
+{
+type: 1,
+content: {
+json: "__________________________________________
+## Breakdown per condition and sign-in status"
+},
+conditionalVisibility: {
+parameterName: "statusCode",
+comparison: "isNotEqualTo",
+value: "0"
+},
+name: "text - 14"
+},
+{
+type: 3,
+content: {
+version: "KqlItem/1.0",
+query: "let prod = (
+    AADNonInteractiveUserSignInLogs
+    | where TimeGenerated {TimeRange:value}
+    | project ConditionalAccessPolicies, UserPrincipalName, AppDisplayName, DeviceDetail
+    | where ConditionalAccessPolicies != "[]"
+    | where "{User:escape}" == "All users" or UserPrincipalName has "{User:escape}"
+    | where "{App:escape}" == "All apps" or AppDisplayName has "{App:escape}"
+    | project-away AppDisplayName
+    | mv-expand todynamic(ConditionalAccessPolicies)
+    | where ConditionalAccessPolicies["id"] == "{policy:escape}"
+    | where ConditionalAccessPolicies.result <> "notApplied" );
+let report = (
+    AADNonInteractiveUserSignInLogs
+    | where TimeGenerated {TimeRange:value}
+    | project ConditionalAccessPolicies, UserPrincipalName, AppDisplayName, DeviceDetail
+    | where ConditionalAccessPolicies != "[]"
+    | where "{User:escape}" == "All users" or UserPrincipalName has "{User:escape}"
+    | where "{App:escape}" == "All apps" or AppDisplayName has "{App:escape}"
+    | project-away AppDisplayName
+    | mv-expand todynamic(ConditionalAccessPolicies)
+    | where ConditionalAccessPolicies["id"] == "{reportpolicy:escape}"
+    | where ConditionalAccessPolicies.result <> "reportOnlyNotApplied"
+    | extend result = ConditionalAccessPolicies["result"]
+    | project-away ConditionalAccessPolicies);
+prod | join kind=rightanti (report) on UserPrincipalName
+// filter by the result type selected
+// Total = any result type (the result type will contain the empty string "")
+// Success = result types containing "uccess" (includes "success" and "reportOnlySuccess")
+// Failure = result types containing "ailure" (includes "failure" and "reportOnlyFailure")
+// User action required = result types containing "nterrupt" (includes "interrupt" and "reportOnlyInterrupted")
+// Not applied = result types containing "ot" (includes "notApplied", "reportOnlyNotApplied", and "notEnabled")
+| extend filterResult = case("{resultName}" == "Total","", "{resultName}" == "Success", "uccess", "{resultName}" == "Failure", "ailure", "{resultName}" == "User action required", "nterrupted","ot")
+| where result contains filterResult
+| extend deviceState = case(todynamic(DeviceDetail)["trustType"] == "", "Unmanaged", todynamic(DeviceDetail)["trustType"])
+{unit} summarize count() by UserPrincipalName, deviceState
+| summarize count() by deviceState
+
+",
+size: 3,
+showAnalytics: true,
+title: "Device State - {resultName}",
+timeContext: {
+durationMs: 604800000
+},
+showExportToExcel: true,
+queryType: 0,
+resourceType: "microsoft.operationalinsights/workspaces",
+crossComponentResources: [
+"{Workspace}"
+],
+visualization: "piechart",
+tileSettings: {
+showBorder: false,
+titleContent: {
+columnMatch: "deviceState",
+formatter: 1
+},
+leftContent: {
+columnMatch: "count_",
+formatter: 12,
+formatOptions: {
+palette: "auto"
+},
+numberFormat: {
+unit: 17,
+options: {
+maximumSignificantDigits: 3,
+maximumFractionDigits: 2
+}
+}
+}
+}
+},
+customWidth: "33",
+conditionalVisibility: {
+parameterName: "policy",
+comparison: "isNotEqualTo",
+value: "All"
+},
+name: "Device state - individual policies"
+},
+{
+type: 3,
+content: {
+version: "KqlItem/1.0",
+query: "let prod = (
+    AADNonInteractiveUserSignInLogs
+    | where TimeGenerated {TimeRange:value}
+    | project ConditionalAccessPolicies, UserPrincipalName, AppDisplayName, DeviceDetail
+    | where ConditionalAccessPolicies != "[]"
+    | where "{User:escape}" == "All users" or UserPrincipalName has "{User:escape}"
+    | where "{App:escape}" == "All apps" or AppDisplayName has "{App:escape}"
+    | project-away AppDisplayName
+    | mv-expand todynamic(ConditionalAccessPolicies)
+    | where ConditionalAccessPolicies["id"] == "{policy:escape}"
+    | where ConditionalAccessPolicies.result <> "notApplied" );
+let report = (
+    AADNonInteractiveUserSignInLogs
+    | where TimeGenerated {TimeRange:value}
+    | project ConditionalAccessPolicies, UserPrincipalName, AppDisplayName, DeviceDetail
+    | where ConditionalAccessPolicies != "[]"
+    | where "{User:escape}" == "All users" or UserPrincipalName has "{User:escape}"
+    | where "{App:escape}" == "All apps" or AppDisplayName has "{App:escape}"
+    | project-away AppDisplayName
+    | mv-expand todynamic(ConditionalAccessPolicies)
+    | where ConditionalAccessPolicies["id"] == "{reportpolicy:escape}"
+    | where ConditionalAccessPolicies.result <> "reportOnlyNotApplied"
+    | extend result = ConditionalAccessPolicies["result"]
+    | project-away ConditionalAccessPolicies);
+prod | join kind=rightanti (report) on UserPrincipalName
+// filter by the result type selected
+// Total = any result type (the result type will contain the empty string "")
+// Success = result types containing "uccess" (includes "success" and "reportOnlySuccess")
+// Failure = result types containing "ailure" (includes "failure" and "reportOnlyFailure")
+// User action required = result types containing "nterrupt" (includes "interrupt" and "reportOnlyInterrupted")
+// Not applied = result types containing "ot" (includes "notApplied", "reportOnlyNotApplied", and "notEnabled")
+| extend filterResult = case("{resultName}" == "Total","", "{resultName}" == "Success", "uccess", "{resultName}" == "Failure", "ailure", "{resultName}" == "User action required", "nterrupted","ot")
+| where result contains filterResult
+| extend device = tostring(todynamic(DeviceDetail)["operatingSystem"])
+{unit} summarize count() by UserPrincipalName, device
+| summarize count() by device",
+size: 3,
+showAnalytics: true,
+title: "Device platform - {resultName}",
+timeContextFromParameter: "TimeRange",
+showExportToExcel: true,
+queryType: 0,
+resourceType: "microsoft.operationalinsights/workspaces",
+crossComponentResources: [
+"{Workspace}"
+],
+visualization: "piechart",
+tileSettings: {
+showBorder: false,
+titleContent: {
+columnMatch: "deviceState",
+formatter: 1
+},
+leftContent: {
+columnMatch: "count_",
+formatter: 12,
+formatOptions: {
+palette: "auto"
+},
+numberFormat: {
+unit: 17,
+options: {
+maximumSignificantDigits: 3,
+maximumFractionDigits: 2
+}
+}
+}
+}
+},
+customWidth: "33",
+conditionalVisibility: {
+parameterName: "policy",
+comparison: "isNotEqualTo",
+value: "All"
+},
+name: "Device platform - individual policy"
+},
+{
+type: 3,
+content: {
+version: "KqlItem/1.0",
+query: "let prod = (
+    AADNonInteractiveUserSignInLogs
+    | where TimeGenerated {TimeRange:value}
+    | project ConditionalAccessPolicies, UserPrincipalName, AppDisplayName, ClientAppUsed
+    | where ConditionalAccessPolicies != "[]"
+    | where "{User:escape}" == "All users" or UserPrincipalName has "{User:escape}"
+    | where "{App:escape}" == "All apps" or AppDisplayName has "{App:escape}"
+    | project-away AppDisplayName
+    | mv-expand todynamic(ConditionalAccessPolicies)
+    | where ConditionalAccessPolicies["id"] == "{policy:escape}"
+    | where ConditionalAccessPolicies.result <> "notApplied" );
+let report = (
+    AADNonInteractiveUserSignInLogs
+    | where TimeGenerated {TimeRange:value}
+    | project ConditionalAccessPolicies, UserPrincipalName, AppDisplayName, ClientAppUsed
+    | where ConditionalAccessPolicies != "[]"
+    | where "{User:escape}" == "All users" or UserPrincipalName has "{User:escape}"
+    | where "{App:escape}" == "All apps" or AppDisplayName has "{App:escape}"
+    | project-away AppDisplayName
+    | mv-expand todynamic(ConditionalAccessPolicies)
+    | where ConditionalAccessPolicies["id"] == "{reportpolicy:escape}"
+    | where ConditionalAccessPolicies.result <> "reportOnlyNotApplied"
+    | extend result = ConditionalAccessPolicies["result"]
+    | project-away ConditionalAccessPolicies);
+prod | join kind=rightanti (report) on UserPrincipalName
+// filter by the result type selected
+// Total = any result type (the result type will contain the empty string "")
+// Success = result types containing "uccess" (includes "success" and "reportOnlySuccess")
+// Failure = result types containing "ailure" (includes "failure" and "reportOnlyFailure")
+// User action required = result types containing "nterrupt" (includes "interrupt" and "reportOnlyInterrupted")
+// Not applied = result types containing "ot" (includes "notApplied", "reportOnlyNotApplied", and "notEnabled")
+| extend filterResult = case("{resultName}" == "Total","", "{resultName}" == "Success", "uccess", "{resultName}" == "Failure", "ailure", "{resultName}" == "User action required", "nterrupted","ot")
+| where result contains filterResult
+{unit} summarize count() by UserPrincipalName, ClientAppUsed
+| summarize count() by ClientAppUsed",
+size: 3,
+showAnalytics: true,
+title: "Client app - {resultName}",
+timeContextFromParameter: "TimeRange",
+showExportToExcel: true,
+queryType: 0,
+resourceType: "microsoft.operationalinsights/workspaces",
+crossComponentResources: [
+"{Workspace}"
+],
+visualization: "piechart",
+tileSettings: {
+showBorder: false,
+titleContent: {
+columnMatch: "deviceState",
+formatter: 1
+},
+leftContent: {
+columnMatch: "count_",
+formatter: 12,
+formatOptions: {
+palette: "auto"
+},
+numberFormat: {
+unit: 17,
+options: {
+maximumSignificantDigits: 3,
+maximumFractionDigits: 2
+}
+}
+}
+}
+},
+customWidth: "33",
+conditionalVisibility: {
+parameterName: "policy",
+comparison: "isNotEqualTo",
+value: "All"
+},
+name: "Client app - individual policy"
+},
+{
+type: 3,
+content: {
+version: "KqlItem/1.0",
+query: "let prod = (
+    AADNonInteractiveUserSignInLogs
+    | where TimeGenerated {TimeRange:value}
+    | project ConditionalAccessPolicies, UserPrincipalName, AppDisplayName, RiskLevelDuringSignIn
+    | where ConditionalAccessPolicies != "[]"
+    | where "{User:escape}" == "All users" or UserPrincipalName has "{User:escape}"
+    | where "{App:escape}" == "All apps" or AppDisplayName has "{App:escape}"
+    | project-away AppDisplayName
+    | mv-expand todynamic(ConditionalAccessPolicies)
+    | where ConditionalAccessPolicies["id"] == "{policy:escape}"
+    | where ConditionalAccessPolicies.result <> "notApplied" );
+let report = (
+    AADNonInteractiveUserSignInLogs
+    | where TimeGenerated {TimeRange:value}
+    | project ConditionalAccessPolicies, UserPrincipalName, AppDisplayName, RiskLevelDuringSignIn
+    | where ConditionalAccessPolicies != "[]"
+    | where "{User:escape}" == "All users" or UserPrincipalName has "{User:escape}"
+    | where "{App:escape}" == "All apps" or AppDisplayName has "{App:escape}"
+    | project-away AppDisplayName
+    | mv-expand todynamic(ConditionalAccessPolicies)
+    | where ConditionalAccessPolicies["id"] == "{reportpolicy:escape}"
+    | where ConditionalAccessPolicies.result <> "reportOnlyNotApplied"
+    | extend result = ConditionalAccessPolicies["result"]
+    | project-away ConditionalAccessPolicies);
+prod | join kind=rightanti (report) on UserPrincipalName
+// filter by the result type selected
+// Total = any result type (the result type will contain the empty string "")
+// Success = result types containing "uccess" (includes "success" and "reportOnlySuccess")
+// Failure = result types containing "ailure" (includes "failure" and "reportOnlyFailure")
+// User action required = result types containing "nterrupt" (includes "interrupt" and "reportOnlyInterrupted")
+// Not applied = result types containing "ot" (includes "notApplied", "reportOnlyNotApplied", and "notEnabled")
+| extend filterResult = case("{resultName}" == "Total","", "{resultName}" == "Success", "uccess", "{resultName}" == "Failure", "ailure", "{resultName}" == "User action required", "nterrupted","ot")
+| where result contains filterResult
+{unit} summarize count() by UserPrincipalName, RiskLevelDuringSignIn
+| summarize count() by RiskLevelDuringSignIn",
+size: 3,
+showAnalytics: true,
+title: "Sign-in risk - {resultName}",
+timeContextFromParameter: "TimeRange",
+showExportToExcel: true,
+queryType: 0,
+resourceType: "microsoft.operationalinsights/workspaces",
+crossComponentResources: [
+"{Workspace}"
+],
+visualization: "piechart",
+tileSettings: {
+showBorder: false,
+titleContent: {
+columnMatch: "deviceState",
+formatter: 1
+},
+leftContent: {
+columnMatch: "count_",
+formatter: 12,
+formatOptions: {
+palette: "auto"
+},
+numberFormat: {
+unit: 17,
+options: {
+maximumSignificantDigits: 3,
+maximumFractionDigits: 2
+}
+}
+}
+}
+},
+customWidth: "33",
+conditionalVisibility: {
+parameterName: "policy",
+comparison: "isNotEqualTo",
+value: "All"
+},
+name: "Sign-in risk - individual policy"
+},
+{
+type: 3,
+content: {
+version: "KqlItem/1.0",
+query: "let prod = (
+    AADNonInteractiveUserSignInLogs
+    | where TimeGenerated {TimeRange:value}
+    | project ConditionalAccessPolicies, UserPrincipalName, AppDisplayName, location = tostring(todynamic(LocationDetails).countryOrRegion)
+    | where ConditionalAccessPolicies != "[]"
+    | where "{User:escape}" == "All users" or UserPrincipalName has "{User:escape}"
+    | where "{App:escape}" == "All apps" or AppDisplayName has "{App:escape}"
+    | project-away AppDisplayName
+    | mv-expand todynamic(ConditionalAccessPolicies)
+    | where ConditionalAccessPolicies["id"] == "{policy:escape}"
+    | where ConditionalAccessPolicies.result <> "notApplied" );
+let report = (
+    AADNonInteractiveUserSignInLogs
+    | where TimeGenerated {TimeRange:value}
+    | project ConditionalAccessPolicies, UserPrincipalName, AppDisplayName, location = tostring(todynamic(LocationDetails).countryOrRegion)
+    | where ConditionalAccessPolicies != "[]"
+    | where "{User:escape}" == "All users" or UserPrincipalName has "{User:escape}"
+    | where "{App:escape}" == "All apps" or AppDisplayName has "{App:escape}"
+    | project-away AppDisplayName
+    | mv-expand todynamic(ConditionalAccessPolicies)
+    | where ConditionalAccessPolicies["id"] == "{reportpolicy:escape}"
+    | where ConditionalAccessPolicies.result <> "reportOnlyNotApplied"
+    | extend result = ConditionalAccessPolicies["result"]
+    | project-away ConditionalAccessPolicies);
+prod | join kind=rightanti (report) on UserPrincipalName
+// filter by the result type selected
+// Total = any result type (the result type will contain the empty string "")
+// Success = result types containing "uccess" (includes "success" and "reportOnlySuccess")
+// Failure = result types containing "ailure" (includes "failure" and "reportOnlyFailure")
+// User action required = result types containing "nterrupt" (includes "interrupt" and "reportOnlyInterrupted")
+// Not applied = result types containing "ot" (includes "notApplied", "reportOnlyNotApplied", and "notEnabled")
+| extend filterResult = case("{resultName}" == "Total","", "{resultName}" == "Success", "uccess", "{resultName}" == "Failure", "ailure", "{resultName}" == "User action required", "nterrupted","ot")
+| where result contains filterResult
+{unit} summarize count() by UserPrincipalName, location
+| summarize Count = count() by location
+| sort by Count desc",
+size: 0,
+showAnalytics: true,
+title: "Location - {resultName}",
+timeContextFromParameter: "TimeRange",
+showExportToExcel: true,
+queryType: 0,
+resourceType: "microsoft.operationalinsights/workspaces",
+crossComponentResources: [
+"{Workspace}"
+],
+visualization: "map",
+gridSettings: {
+formatters: [
+{
+columnMatch: "location",
+formatter: 8,
+formatOptions: {
+palette: "green",
+showIcon: true,
+aggregation: "Count"
+}
+},
+{
+columnMatch: "Count",
+formatter: 8,
+formatOptions: {
+palette: "blue",
+showIcon: true,
+aggregation: "Max"
+}
+},
+{
+columnMatch: "-- Group By --",
+formatter: 8,
+formatOptions: {
+palette: "green",
+showIcon: true
+}
+}
+]
+},
+mapSettings: {
+locInfo: "CountryRegion",
+locInfoColumn: "location",
+sizeSettings: "Count",
+sizeAggregation: "Sum",
+labelSettings: "location",
+legendMetric: "Count",
+numberOfMetrics: 10,
+legendAggregation: "Sum",
+itemColorSettings: {
+nodeColorField: "Count",
+colorAggregation: "Sum",
+type: "heatmap",
+heatmapPalette: "greenRed"
+}
+}
+},
+customWidth: "33",
+conditionalVisibility: {
+parameterName: "policy",
+comparison: "isNotEqualTo",
+value: "All"
+},
+name: "Location - individual policies"
+},
+{
+type: 3,
+content: {
+version: "KqlItem/1.0",
+query: "let prod = (
+    AADNonInteractiveUserSignInLogs
+    | where TimeGenerated {TimeRange:value}
+    | project ConditionalAccessPolicies, UserPrincipalName, AppDisplayName
+    | where ConditionalAccessPolicies != "[]"
+    | where "{User:escape}" == "All users" or UserPrincipalName has "{User:escape}"
+    | where "{App:escape}" == "All apps" or AppDisplayName has "{App:escape}"
+    | mv-expand todynamic(ConditionalAccessPolicies)
+    | where ConditionalAccessPolicies["id"] == "{policy:escape}"
+    | where ConditionalAccessPolicies.result <> "notApplied" );
+let report = (
+    AADNonInteractiveUserSignInLogs
+    | where TimeGenerated {TimeRange:value}
+    | project ConditionalAccessPolicies, UserPrincipalName, AppDisplayName
+    | where ConditionalAccessPolicies != "[]"
+    | where "{User:escape}" == "All users" or UserPrincipalName has "{User:escape}"
+    | where "{App:escape}" == "All apps" or AppDisplayName has "{App:escape}"
+    | mv-expand todynamic(ConditionalAccessPolicies)
+    | where ConditionalAccessPolicies["id"] == "{reportpolicy:escape}"
+    | where ConditionalAccessPolicies.result <> "reportOnlyNotApplied"
+    | extend result = ConditionalAccessPolicies["result"]
+    | project-away ConditionalAccessPolicies);
+prod | join kind=rightanti (report) on UserPrincipalName
+// filter by the result type selected
+// Total = any result type (the result type will contain the empty string "")
+// Success = result types containing "uccess" (includes "success" and "reportOnlySuccess")
+// Failure = result types containing "ailure" (includes "failure" and "reportOnlyFailure")
+// User action required = result types containing "nterrupt" (includes "interrupt" and "reportOnlyInterrupted")
+// Not applied = result types containing "ot" (includes "notApplied", "reportOnlyNotApplied", and "notEnabled")
+| extend filterResult = case("{resultName}" == "Total","", "{resultName}" == "Success", "uccess", "{resultName}" == "Failure", "ailure", "{resultName}" == "User action required", "nterrupted","ot")
+| where result contains filterResult
+{unit} summarize count() by UserPrincipalName, AppDisplayName
+| summarize Count = count() by AppDisplayName
+| sort by Count desc",
+size: 1,
+showAnalytics: true,
+title: "Applications - {resultName}",
+timeContextFromParameter: "TimeRange",
+showExportToExcel: true,
+queryType: 0,
+resourceType: "microsoft.operationalinsights/workspaces",
+crossComponentResources: [
+"{Workspace}"
+],
+visualization: "table",
+gridSettings: {
+formatters: [
+{
+columnMatch: "location",
+formatter: 8,
+formatOptions: {
+palette: "green",
+showIcon: true,
+aggregation: "Count"
+}
+},
+{
+columnMatch: "Count",
+formatter: 8,
+formatOptions: {
+palette: "blue",
+showIcon: true,
+aggregation: "Max"
+}
+},
+{
+columnMatch: "-- Group By --",
+formatter: 8,
+formatOptions: {
+palette: "green",
+showIcon: true
+}
+}
+]
+}
+},
+customWidth: "33",
+conditionalVisibility: {
+parameterName: "policy",
+comparison: "isNotEqualTo",
+value: "All"
+},
+name: "Application - individual policies"
+},
+{
+type: 1,
+content: {
+json: "____________________________________________
+## Sign-in details
+💡 _To investigate sign-in details of a specific user, filter by user principal name (UPN) at the top of the workbook_"
+},
+conditionalVisibility: {
+parameterName: "statusCode",
+comparison: "isNotEqualTo",
+value: "0"
+},
+name: "Instructions 2"
+},
+{
+type: 3,
+content: {
+version: "KqlItem/1.0",
+query: "let prod = (
+    AADNonInteractiveUserSignInLogs
+    | where TimeGenerated {TimeRange:value}
+    | project ConditionalAccessPolicies, UserPrincipalName, AppDisplayName
+    | where ConditionalAccessPolicies != "[]"
+    | where "{User:escape}" == "All users" or UserPrincipalName has "{User:escape}"
+    | where "{App:escape}" == "All apps" or AppDisplayName has "{App:escape}"
+    | mv-expand todynamic(ConditionalAccessPolicies)
+    | where ConditionalAccessPolicies["id"] == "{policy:escape}"
+    | where ConditionalAccessPolicies.result <> "notApplied" );
+let report = (
+    AADNonInteractiveUserSignInLogs
+    | where TimeGenerated {TimeRange:value}
+    | project ConditionalAccessPolicies, UserPrincipalName, AppDisplayName
+    | where ConditionalAccessPolicies != "[]"
+    | where "{User:escape}" == "All users" or UserPrincipalName has "{User:escape}"
+    | where "{App:escape}" == "All apps" or AppDisplayName has "{App:escape}"
+    | mv-expand todynamic(ConditionalAccessPolicies)
+    | where ConditionalAccessPolicies["id"] == "{reportpolicy:escape}"
+    | where ConditionalAccessPolicies.result <> "reportOnlyNotApplied"
+    | extend result = ConditionalAccessPolicies["result"]
+    | project-away ConditionalAccessPolicies);
+prod | join kind=rightanti (report) on UserPrincipalName
+// filter by the result type selected
+// Total = any result type (the result type will contain the empty string "")
+// Success = result types containing "uccess" (includes "success" and "reportOnlySuccess")
+// Failure = result types containing "ailure" (includes "failure" and "reportOnlyFailure")
+// User action required = result types containing "nterrupt" (includes "interrupt" and "reportOnlyInterrupted")
+// Not applied = result types containing "ot" (includes "notApplied", "reportOnlyNotApplied", and "notEnabled")
+| extend filterResult = case("{resultName}" == "Total","", "{resultName}" == "Success", "uccess", "{resultName}" == "Failure", "ailure", "{resultName}" == "User action required", "nterrupted","ot")
+| where result contains filterResult
+| summarize Count = count() by UserPrincipalName
+| sort by Count desc",
+size: 0,
+showAnalytics: true,
+title: "User sign-in count - {resultName}",
+timeContextFromParameter: "TimeRange",
+exportFieldName: "UserPrincipalName",
+exportParameterName: "user",
+exportDefaultValue: "*",
+showExportToExcel: true,
+queryType: 0,
+resourceType: "microsoft.operationalinsights/workspaces",
+crossComponentResources: [
+"{Workspace}"
+],
+gridSettings: {
+formatters: [
+{
+columnMatch: "Count",
+formatter: 8,
+formatOptions: {
+showIcon: true
+}
+},
+{
+columnMatch: "Signins",
+formatter: 8,
+formatOptions: {
+showIcon: true
+}
+}
+],
+rowLimit: 10000,
+filter: true
+}
+},
+customWidth: "30",
+conditionalVisibility: {
+parameterName: "policy",
+comparison: "isNotEqualTo",
+value: "All"
+},
+name: "User sign-in - individual policies"
+},
+{
+type: 3,
+content: {
+version: "KqlItem/1.0",
+query: "let prod = (
+    AADNonInteractiveUserSignInLogs
+    | where TimeGenerated {TimeRange:value}
+    | project ConditionalAccessPolicies, TimeGenerated, UserPrincipalName, AppDisplayName, CorrelationId, Status
+    | where ConditionalAccessPolicies != "[]"
+    | where '{user:escape}' == '*' or '{user:escape}' == UserPrincipalName
+    | where "{User:escape}" == "All users" or UserPrincipalName has "{User:escape}"
+    | where "{App:escape}" == "All apps" or AppDisplayName has "{App:escape}"
+    | mv-expand todynamic(ConditionalAccessPolicies)
+    | where ConditionalAccessPolicies["id"] == "{policy:escape}"
+    | where ConditionalAccessPolicies.result <> "notApplied" );
+let report = (
+    AADNonInteractiveUserSignInLogs
+    | where TimeGenerated > ago(7d)
+    | project ConditionalAccessPolicies, TimeGenerated, UserPrincipalName, AppDisplayName, CorrelationId, Status
+    | where '{user:escape}' == '*' or '{user:escape}' == UserPrincipalName
+    | where "{User:escape}" == "All users" or UserPrincipalName has "{User:escape}"
+    | where "{App:escape}" == "All apps" or AppDisplayName has "{App:escape}"
+    | mv-expand todynamic(ConditionalAccessPolicies)
+    | mv-expand todynamic(Status)
+    | where ConditionalAccessPolicies["id"] == "{reportpolicy:escape}"
+    | where ConditionalAccessPolicies.result <> "reportOnlyNotApplied"
+    | extend result = ConditionalAccessPolicies["result"], failureReason = tostring(Status["failureReason"])
+    | project-away ConditionalAccessPolicies);
+prod | join kind=rightanti (report) on UserPrincipalName
+// filter by the result type selected
+// Total = any result type (the result type will contain the empty string "")
+// Success = result types containing "uccess" (includes "success" and "reportOnlySuccess")
+// Failure = result types containing "ailure" (includes "failure" and "reportOnlyFailure")
+// User action required = result types containing "nterrupt" (includes "interrupt" and "reportOnlyInterrupted")
+// Not applied = result types containing "ot" (includes "notApplied", "reportOnlyNotApplied", and "notEnabled")
+| extend filterResult = case("{resultName}" == "Total","", "{resultName}" == "Success", "uccess", "{resultName}" == "Failure", "ailure", "{resultName}" == "User action required", "nterrupted","ot")
+| where result contains filterResult
+| project TimeGenerated, UserPrincipalName, AppDisplayName, result, CorrelationId
+| sort by TimeGenerated desc",
+size: 0,
+showAnalytics: true,
+title: "Sign-in events - {resultName}",
+timeContextFromParameter: "TimeRange",
+showExportToExcel: true,
+queryType: 0,
+resourceType: "microsoft.operationalinsights/workspaces",
+crossComponentResources: [
+"{Workspace}"
+],
+gridSettings: {
+formatters: [
+{
+columnMatch: "Signins",
+formatter: 0,
+formatOptions: {
+showIcon: true,
+aggregation: "Count"
+}
+},
+{
+columnMatch: "combinedResult",
+formatter: 0,
+formatOptions: {
+showIcon: true,
+aggregation: "Count"
+}
+}
+],
+rowLimit: 1000,
+filter: true
+}
+},
+customWidth: "70",
+conditionalVisibility: {
+parameterName: "policy",
+comparison: "isNotEqualTo",
+value: "All"
+},
+name: "Sign-in details - individual policies"
+}
+]
+},
+conditionalVisibility: {
+parameterName: "identityType",
+comparison: "isEqualTo",
+value: "user"
+},
+name: "User sign-ins tab"
+},
+{
+type: 9,
+content: {
+version: "KqlParameterItem/1.0",
+parameters: [
+{
+id: "a51f7613-7f1e-4f77-835f-b5390b13a4f3",
+version: "KqlParameterItem/1.0",
+name: "policy",
+label: "Conditional Access policy",
+type: 2,
+description: "Show result for all enabled policies. Cannot select individual policies that apply to service principals.",
+isRequired: true,
+value: "All",
+typeSettings: {
+additionalResourceOptions: [ ],
+showDefault: false
+},
+jsonData: "[
+    {"value": "All", "label": "All enabled policies"}
+]"
+},
+{
+id: "dfa8db4a-0f30-479b-9f11-70ad8d619a1e",
+version: "KqlParameterItem/1.0",
+name: "TimeRange",
+label: "Time range",
+type: 4,
+isRequired: true,
+value: {
+durationMs: 86400000
+},
+typeSettings: {
+selectableValues: [
+{
+durationMs: 1800000
+},
+{
+durationMs: 3600000
+},
+{
+durationMs: 14400000
+},
+{
+durationMs: 43200000
+},
+{
+durationMs: 86400000
+},
+{
+durationMs: 172800000
+},
+{
+durationMs: 259200000
+},
+{
+durationMs: 604800000
+},
+{
+durationMs: 1209600000
+},
+{
+durationMs: 2419200000
+},
+{
+durationMs: 2592000000
+},
+{
+durationMs: 5184000000
+},
+{
+durationMs: 7776000000
+}
+],
+allowCustom: true
+}
+},
+{
+id: "e3b79b8a-9866-40aa-9261-ed6aab1f76b2",
+version: "KqlParameterItem/1.0",
+name: "spid",
+label: "Service Prinicpal ID",
+type: 1,
+description: "Exact match on service principal ID. Default value is "All service principals"",
+value: "All service principals",
+timeContext: {
+durationMs: 86400000
+},
+timeContextFromParameter: "TimeRange"
+},
+{
+id: "dc9f0dd1-cbfe-4610-a8c7-414da5856a60",
+version: "KqlParameterItem/1.0",
+name: "App",
+label: "Resource",
+type: 1,
+description: "Exact match on resource display name. Default value is "All apps"",
+value: "All apps",
+timeContext: {
+durationMs: 86400000
+},
+timeContextFromParameter: "TimeRange"
+},
+{
+id: "3b0b16aa-ce0a-4940-813c-ec722560223a",
+version: "KqlParameterItem/1.0",
+name: "unit",
+label: "Data view",
+type: 2,
+description: "Display results by number of service principals or number of sign-ins",
+isRequired: true,
+query: "let unit = datatable(label:string,units:string)
+["service principals", "|",
+ "sign-ins","//"];
+unit 
+| project Value = units, Label = label",
+crossComponentResources: [
+"{Workspace}"
+],
+value: "|",
+typeSettings: {
+additionalResourceOptions: [ ],
+showDefault: false
+},
+timeContext: {
+durationMs: 86400000
+},
+timeContextFromParameter: "TimeRange",
+queryType: 0,
+resourceType: "microsoft.operationalinsights/workspaces"
+}
+],
+style: "pills",
+queryType: 0,
+resourceType: "microsoft.operationalinsights/workspaces"
+},
+conditionalVisibility: {
+parameterName: "identityType",
+comparison: "isEqualTo",
+value: "servicePrincipal"
+},
+name: "parameters - 1 - Copy"
+},
+{
+type: 12,
+content: {
+version: "NotebookGroup/1.0",
+groupType: "editable",
+items: [
+{
+type: 1,
+content: {
+json: "## Impact summary
+💡 *Click on the tiles below to filter the report by the selected Conditional Access result.*"
+},
+name: "text - 21"
+},
+{
+type: 3,
+content: {
+version: "KqlItem/1.0",
+query: "// Total
+AADServicePrincipalSignInLogs
+| where TimeGenerated {TimeRange:value}
+| project ServicePrincipalId, ResourceDisplayName
+| where "{spid:escape}" == "All service principals" or ServicePrincipalId has "{spid:escape}"
+| where "{App:escape}" == "All apps" or ResourceDisplayName has "{App:escape}"
+| project-away ResourceDisplayName
+{unit} summarize count() by ServicePrincipalId
+| summarize count()
+| extend resultName = "Total", unit = case("{unit}" == "//", "sign-ins","users"), statusCode = 1
+//
+//
+// Number of success/failure/user action required/not applied
+| union (
+AADServicePrincipalSignInLogs
+| where TimeGenerated {TimeRange:value}
+| project ConditionalAccessStatus, ServicePrincipalId, ResourceDisplayName
+| where "{spid:escape}" == "All service principals" or ServicePrincipalId has "{spid:escape}"
+| where "{App:escape}" == "All apps" or ResourceDisplayName has "{App:escape}"
+| project-away ResourceDisplayName
+| extend resultName = case(ConditionalAccessStatus == "success", "Success", ConditionalAccessStatus == "failure", "Failure", "Not applied")
+| extend statusCode = case(ConditionalAccessStatus == "success", 2, ConditionalAccessStatus == "failure", 3, 4)
+{unit} summarize count() by resultName, ServicePrincipalId, statusCode
+| summarize count() by resultName, statusCode
+| extend unit = case("{unit}" == "//", "sign-ins","users")
+)
+//
+// Case if result count is 0
+| join kind = fullouter (
+    datatable (resultName:string,statusCode1:string)
+    ["Total", 1,
+     "Success", 2,
+     "Failure", 3,
+     "Not applied", 4]
+) on resultName
+| extend resultName = iff(resultName == '', resultName1, resultName), count_ = iff(resultName == '', 0, count_), unit = "{unit:label}", statusCode1
+| project-away resultName1
+| sort by statusCode1 asc",
+size: 4,
+showAnalytics: true,
+timeContextFromParameter: "TimeRange",
+exportFieldName: "resultName",
+exportParameterName: "resultName",
+exportDefaultValue: "Total",
+showExportToExcel: true,
+queryType: 0,
+resourceType: "microsoft.operationalinsights/workspaces",
+crossComponentResources: [
+"{Workspace}"
+],
+visualization: "tiles",
+tileSettings: {
+titleContent: {
+columnMatch: "resultName",
+formatter: 1
+},
+leftContent: {
+columnMatch: "count_",
+formatter: 12,
+formatOptions: {
+palette: "auto"
+},
+numberFormat: {
+unit: 17,
+options: {
+style: "decimal",
+maximumFractionDigits: 2,
+maximumSignificantDigits: 3
+}
+}
+},
+secondaryContent: {
+columnMatch: "unit",
+formatter: 1
+},
+showBorder: true
+}
+},
+conditionalVisibility: {
+parameterName: "policy",
+comparison: "isEqualTo",
+value: "All"
+},
+name: "query - 21"
+},
+{
+type: 1,
+content: {
+json: "**Total**: Number of {unit:label} in the {TimeRange}</br>
+**Success**: Number of {unit:label} where the selected polic(ies) granted access and the required controls were satisifed</br>
+**Failure**: Number of {unit:label} where the selected polic(ies) denied access and the required controls were not satisfied</br>
+**User action required**: Number of {unit:label} where the selected report-only policy applied but user action (e.g. MFA or Terms of Use) would be required if the policy were enabled.</br>
+**Not applied**: Number of {unit:label} that are bypassing the selected polic(ies) because the sign-in did not match at least one of the assignments or conditions. "
+},
+conditionalVisibility: {
+parameterName: "Guide",
+comparison: "isEqualTo",
+value: "On"
+},
+name: "Instructions 3"
+},
+{
+type: 3,
+content: {
+version: "KqlItem/1.0",
+query: "// Total
+SigninLogs
+| where TimeGenerated {TimeRange:value}
+| project ConditionalAccessPolicies, UserPrincipalName, AppDisplayName
+| where ConditionalAccessPolicies != "[]"
+| where "{User:escape}" == "All users" or UserPrincipalName has "{User:escape}"
+| where "{App:escape}" == "All apps" or AppDisplayName has "{App:escape}"
+| project-away AppDisplayName
+| mv-expand ConditionalAccessPolicies
+| where ConditionalAccessPolicies["id"] == "{policy:escape}"
+| project-away ConditionalAccessPolicies
+{unit} summarize count() by UserPrincipalName
+| summarize count()
+| extend resultName = "Total", unit = case("{unit}" == "//", "sign-ins","users"), statusCode = 1
+//
+//
+// Number of success/failure/user action required/not applied
+| union (
+SigninLogs
+| where TimeGenerated {TimeRange:value}
+| project ConditionalAccessPolicies, UserPrincipalName, AppDisplayName
+| where ConditionalAccessPolicies != "[]"
+| where "{User:escape}" == "All users" or UserPrincipalName has "{User:escape}"
+| where "{App:escape}" == "All apps" or AppDisplayName has "{App:escape}"
+| project-away AppDisplayName
+| mv-expand ConditionalAccessPolicies
+| where ConditionalAccessPolicies["id"] == "{policy:escape}"
+| extend result = ConditionalAccessPolicies["result"]
+| project-away ConditionalAccessPolicies
+| extend resultName = case(result == "success" or result == "reportOnlySuccess", "Success", result == "failure" or result == "reportOnlyFailure", "Failure", result == "interrupt" or result == "reportOnlyInterrupted", "User action required", "Not applied")
+| extend statusCode = case(resultName == "Success", 2, resultName == "Failure", 3, resultName == "User action required", 4, 5)
+{unit} summarize count() by resultName, UserPrincipalName, statusCode
+| summarize count() by resultName, statusCode
+| extend unit = case("{unit}" == "//", "sign-ins","users")
+)
+//
+// Case if result count is 0
+| join kind = fullouter (
+    datatable (resultName:string,statusCode1:string)
+    ["Total", 1,
+     "Success", 2,
+     "Failure", 3,
+     "User action required", 4,
+     "Not applied", 5]
+) on resultName
+| extend resultName = iff(resultName == '', resultName1, resultName), count_ = iff(resultName == '', 0, count_), unit = "{unit:label}", statusCode1
+| project-away resultName1
+| sort by statusCode1 asc",
+size: 3,
+showAnalytics: true,
+timeContextFromParameter: "TimeRange",
+exportFieldName: "resultName",
+exportParameterName: "resultName",
+exportDefaultValue: "Total",
+showExportToExcel: true,
+queryType: 0,
+resourceType: "microsoft.operationalinsights/workspaces",
+crossComponentResources: [
+"{Workspace}"
+],
+visualization: "tiles",
+tileSettings: {
+titleContent: {
+columnMatch: "resultName",
+formatter: 1,
+formatOptions: {
+showIcon: true
+}
+},
+leftContent: {
+columnMatch: "count_",
+formatter: 12,
+formatOptions: {
+palette: "auto",
+showIcon: true
+},
+numberFormat: {
+unit: 17,
+options: {
+maximumSignificantDigits: 3,
+maximumFractionDigits: 2
+}
+}
+},
+secondaryContent: {
+columnMatch: "unit",
+formatter: 1,
+formatOptions: {
+showIcon: true
+}
+},
+showBorder: true
+}
+},
+conditionalVisibility: {
+parameterName: "policy",
+comparison: "isNotEqualTo",
+value: "All"
+},
+name: "query - 56"
+},
+{
+type: 1,
+content: {
+json: "__________________________________________
+## Breakdown per condition and sign-in status"
+},
+conditionalVisibility: {
+parameterName: "statusCode",
+comparison: "isNotEqualTo",
+value: "0"
+},
+name: "text - 14"
+},
+{
+type: 3,
+content: {
+version: "KqlItem/1.0",
+query: "AADServicePrincipalSignInLogs
+| where TimeGenerated {TimeRange:value}
+| project ConditionalAccessPolicies, ServicePrincipalId, ResourceDisplayName, Location
+| where ConditionalAccessPolicies != ""
+| where "{spid:escape}" == "All service principals" or ServicePrincipalId has "{spid:escape}"
+| where "{App:escape}" == "All apps" or ResourceDisplayName has "{App:escape}"
+| project-away ResourceDisplayName
+| mv-expand ConditionalAccessPolicies
+| where ConditionalAccessPolicies["id"] == "{policy:escape}"
+| extend result = ConditionalAccessPolicies["result"]
+| project-away ConditionalAccessPolicies
+// filter by the result type selected
+// Total = any result type (the result type will contain the empty string "")
+// Success = result types containing "uccess" (includes "success" and "reportOnlySuccess")
+// Failure = result types containing "ailure" (includes "failure" and "reportOnlyFailure")
+// User action required = result types containing "nterrupt" (includes "interrupt" and "reportOnlyInterrupted")
+// Not applied = result types containing "ot" (includes "notApplied", "reportOnlyNotApplied", and "notEnabled")
+| extend filterResult = case("{resultName}" == "Total","", "{resultName}" == "Success", "uccess", "{resultName}" == "Failure", "ailure", "{resultName}" == "User action required", "nterrupted","ot")
+| where result contains filterResult
+{unit} summarize count() by ServicePrincipalId, Location
+| summarize Count = count() by Location
+| sort by Count desc",
+size: 0,
+showAnalytics: true,
+title: "Location - {resultName}",
+timeContextFromParameter: "TimeRange",
+showExportToExcel: true,
+queryType: 0,
+resourceType: "microsoft.operationalinsights/workspaces",
+crossComponentResources: [
+"{Workspace}"
+],
+visualization: "map",
+gridSettings: {
+formatters: [
+{
+columnMatch: "location",
+formatter: 8,
+formatOptions: {
+palette: "green",
+showIcon: true,
+aggregation: "Count"
+}
+},
+{
+columnMatch: "Count",
+formatter: 8,
+formatOptions: {
+palette: "blue",
+showIcon: true,
+aggregation: "Max"
+}
+},
+{
+columnMatch: "-- Group By --",
+formatter: 8,
+formatOptions: {
+palette: "green",
+showIcon: true
+}
+}
+]
+},
+mapSettings: {
+locInfo: "CountryRegion",
+locInfoColumn: "location",
+sizeSettings: "Count",
+sizeAggregation: "Sum",
+labelSettings: "location",
+legendMetric: "Count",
+numberOfMetrics: 10,
+legendAggregation: "Sum",
+itemColorSettings: {
+nodeColorField: "Count",
+colorAggregation: "Sum",
+type: "heatmap",
+heatmapPalette: "greenRed"
+}
+}
+},
+customWidth: "33",
+conditionalVisibility: {
+parameterName: "policy",
+comparison: "isNotEqualTo",
+value: "All"
+},
+name: "Location - individual policies"
+},
+{
+type: 3,
+content: {
+version: "KqlItem/1.0",
+query: "AADServicePrincipalSignInLogs
+| where TimeGenerated {TimeRange:value}
+| project ConditionalAccessStatus, ServicePrincipalId, ResourceDisplayName, location = Location
+| where "{spid:escape}" == "All service principals" or ServicePrincipalId has "{spid:escape}"
+| where "{App:escape}" == "All apps" or ResourceDisplayName has "{App:escape}"
+| project-away ResourceDisplayName
+| extend filterResult = case("{resultName}" == "Total","", "{resultName}" == "Success", "success", "{resultName}" == "Failure", "failure", "notApplied")
+| where ConditionalAccessStatus contains filterResult
+{unit} summarize count() by ServicePrincipalId, location
+| summarize Count = count() by location
+| sort by Count desc",
+size: 0,
+showAnalytics: true,
+title: "Location - {resultName}",
+timeContextFromParameter: "TimeRange",
+showExportToExcel: true,
+queryType: 0,
+resourceType: "microsoft.operationalinsights/workspaces",
+crossComponentResources: [
+"{Workspace}"
+],
+visualization: "map",
+gridSettings: {
+formatters: [
+{
+columnMatch: "location",
+formatter: 8,
+formatOptions: {
+palette: "green",
+showIcon: true,
+aggregation: "Count"
+}
+},
+{
+columnMatch: "Count",
+formatter: 8,
+formatOptions: {
+palette: "blue",
+showIcon: true,
+aggregation: "Max"
+}
+},
+{
+columnMatch: "-- Group By --",
+formatter: 8,
+formatOptions: {
+palette: "green",
+showIcon: true
+}
+}
+]
+},
+mapSettings: {
+locInfo: "CountryRegion",
+locInfoColumn: "location",
+sizeSettings: "Count",
+sizeAggregation: "Sum",
+labelSettings: "location",
+legendMetric: "Count",
+legendAggregation: "Sum",
+itemColorSettings: {
+nodeColorField: "Count",
+colorAggregation: "Sum",
+type: "heatmap",
+heatmapPalette: "greenRed"
+}
+}
+},
+customWidth: "33",
+conditionalVisibility: {
+parameterName: "policy",
+comparison: "isEqualTo",
+value: "All"
+},
+name: "Location - all enabled policies"
+},
+{
+type: 3,
+content: {
+version: "KqlItem/1.0",
+query: "AADServicePrincipalSignInLogs
+| where TimeGenerated {TimeRange:value}
+| project ConditionalAccessPolicies, ServicePrincipalId, ResourceDisplayName
+| where ConditionalAccessPolicies != "[]"
+| where "{spid:escape}" == "All service principals" or ServicePrincipalId has "{spid:escape}"
+| where "{App:escape}" == "All apps" or ResourceDisplayName has "{App:escape}"
+| mv-expand ConditionalAccessPolicies
+| where ConditionalAccessPolicies["id"] == "{policy:escape}"
+| extend result = ConditionalAccessPolicies["result"]
+| project-away ConditionalAccessPolicies
+// filter by the result type selected
+// Total = any result type (the result type will contain the empty string "")
+// Success = result types containing "uccess" (includes "success" and "reportOnlySuccess")
+// Failure = result types containing "ailure" (includes "failure" and "reportOnlyFailure")
+// User action required = result types containing "nterrupt" (includes "interrupt" and "reportOnlyInterrupted")
+// Not applied = result types containing "ot" (includes "notApplied", "reportOnlyNotApplied", and "notEnabled")
+| extend filterResult = case("{resultName}" == "Total","", "{resultName}" == "Success", "uccess", "{resultName}" == "Failure", "ailure", "{resultName}" == "User action required", "nterrupted","ot")
+| where result contains filterResult
+{unit} summarize count() by ServicePrincipalId, ResourceDisplayName
+| summarize Count = count() by ResourceDisplayName
+| sort by Count desc",
+size: 1,
+showAnalytics: true,
+title: "Resources - {resultName}",
+timeContextFromParameter: "TimeRange",
+showExportToExcel: true,
+queryType: 0,
+resourceType: "microsoft.operationalinsights/workspaces",
+crossComponentResources: [
+"{Workspace}"
+],
+visualization: "table",
+gridSettings: {
+formatters: [
+{
+columnMatch: "location",
+formatter: 8,
+formatOptions: {
+palette: "green",
+showIcon: true,
+aggregation: "Count"
+}
+},
+{
+columnMatch: "Count",
+formatter: 8,
+formatOptions: {
+palette: "blue",
+showIcon: true,
+aggregation: "Max"
+}
+},
+{
+columnMatch: "-- Group By --",
+formatter: 8,
+formatOptions: {
+palette: "green",
+showIcon: true
+}
+}
+]
+}
+},
+customWidth: "33",
+conditionalVisibility: {
+parameterName: "policy",
+comparison: "isNotEqualTo",
+value: "All"
+},
+name: "Application - individual policies"
+},
+{
+type: 3,
+content: {
+version: "KqlItem/1.0",
+query: "AADServicePrincipalSignInLogs
+| where TimeGenerated {TimeRange:value}
+| project ConditionalAccessStatus, ServicePrincipalId   , ResourceDisplayName
+| where "{spid:escape}" == "All service principals" or ServicePrincipalId has "{spid:escape}"
+| where "{App:escape}" == "All apps" or ResourceDisplayName has "{App:escape}"
+| extend filterResult = case("{resultName}" == "Total","", "{resultName}" == "Success", "success", "{resultName}" == "Failure", "failure", "notApplied")
+| where ConditionalAccessStatus contains filterResult
+{unit} summarize count() by ServicePrincipalId, ResourceDisplayName
+| summarize Count = count() by ResourceDisplayName
+| sort by Count desc",
+size: 1,
+showAnalytics: true,
+title: "Resources - {resultName}",
+timeContextFromParameter: "TimeRange",
+showExportToExcel: true,
+queryType: 0,
+resourceType: "microsoft.operationalinsights/workspaces",
+crossComponentResources: [
+"{Workspace}"
+],
+visualization: "table",
+gridSettings: {
+formatters: [
+{
+columnMatch: "location",
+formatter: 8,
+formatOptions: {
+palette: "green",
+showIcon: true,
+aggregation: "Count"
+}
+},
+{
+columnMatch: "Count",
+formatter: 8,
+formatOptions: {
+palette: "blue",
+showIcon: true,
+aggregation: "Max"
+}
+},
+{
+columnMatch: "-- Group By --",
+formatter: 8,
+formatOptions: {
+palette: "green",
+showIcon: true
+}
+}
+]
+}
+},
+customWidth: "33",
+conditionalVisibility: {
+parameterName: "policy",
+comparison: "isEqualTo",
+value: "All"
+},
+name: "Applications - all enabled policies"
+},
+{
+type: 1,
+content: {
+json: "____________________________________________
+## Sign-in details
+💡 _To investigate sign-in details of a specific service principal, filter by service principal ID at the top of the workbook_"
+},
+conditionalVisibility: {
+parameterName: "statusCode",
+comparison: "isNotEqualTo",
+value: "0"
+},
+name: "Instructions 4"
+},
+{
+type: 3,
+content: {
+version: "KqlItem/1.0",
+query: "SigninLogs
+| where TimeGenerated {TimeRange:value}
+| project ConditionalAccessPolicies, UserPrincipalName, AppDisplayName
+| where ConditionalAccessPolicies != "[]"
+| where "{User:escape}" == "All users" or UserPrincipalName has "{User:escape}"
+| where "{App:escape}" == "All apps" or AppDisplayName has "{App:escape}"
+| project-away AppDisplayName
+| mv-expand ConditionalAccessPolicies
+| where ConditionalAccessPolicies["id"] == "{policy:escape}"
+| extend result = ConditionalAccessPolicies["result"]
+| project-away ConditionalAccessPolicies
+// filter by the result type selected
+// Total = any result type (the result type will contain the empty string "")
+// Success = result types containing "uccess" (includes "success" and "reportOnlySuccess")
+// Failure = result types containing "ailure" (includes "failure" and "reportOnlyFailure")
+// User action required = result types containing "nterrupt" (includes "interrupt" and "reportOnlyInterrupted")
+// Not applied = result types containing "ot" (includes "notApplied", "reportOnlyNotApplied", and "notEnabled")
+| extend filterResult = case("{resultName}" == "Total","", "{resultName}" == "Success", "uccess", "{resultName}" == "Failure", "ailure", "{resultName}" == "User action required", "nterrupted","ot")
+| where result contains filterResult
+| summarize Count = count() by UserPrincipalName
+| sort by Count desc",
+size: 0,
+showAnalytics: true,
+title: "User sign-in count - {resultName}",
+timeContextFromParameter: "TimeRange",
+exportFieldName: "UserPrincipalName",
+exportParameterName: "user",
+exportDefaultValue: "*",
+showExportToExcel: true,
+queryType: 0,
+resourceType: "microsoft.operationalinsights/workspaces",
+crossComponentResources: [
+"{Workspace}"
+],
+gridSettings: {
+formatters: [
+{
+columnMatch: "Count",
+formatter: 8,
+formatOptions: {
+showIcon: true
+}
+},
+{
+columnMatch: "Signins",
+formatter: 8,
+formatOptions: {
+showIcon: true
+}
+}
+],
+rowLimit: 10000,
+filter: true
+}
+},
+customWidth: "30",
+conditionalVisibility: {
+parameterName: "policy",
+comparison: "isNotEqualTo",
+value: "All"
+},
+name: "User sign-in - individual policies"
+},
+{
+type: 3,
+content: {
+version: "KqlItem/1.0",
+query: "AADServicePrincipalSignInLogs
+| where TimeGenerated {TimeRange:value}
+| project ConditionalAccessStatus, ServicePrincipalId, ResourceDisplayName
+| where "{spid:escape}" == "All service principals" or ServicePrincipalId has "{spid:escape}"
+| where "{App:escape}" == "All apps" or ResourceDisplayName has "{App:escape}"
+| project-away ResourceDisplayName
+| extend filterResult = case("{resultName}" == "Total","", "{resultName}" == "Success", "success", "{resultName}" == "Failure", "failure", "notApplied")
+| where ConditionalAccessStatus contains filterResult
+| summarize Count = count() by ServicePrincipalId
+| sort by Count desc",
+size: 0,
+showAnalytics: true,
+title: "Service principal sign-in count - {resultName}",
+timeContextFromParameter: "TimeRange",
+exportFieldName: "ServicePrincipalId",
+exportParameterName: "sp",
+exportDefaultValue: "*",
+showExportToExcel: true,
+queryType: 0,
+resourceType: "microsoft.operationalinsights/workspaces",
+crossComponentResources: [
+"{Workspace}"
+],
+gridSettings: {
+formatters: [
+{
+columnMatch: "Count",
+formatter: 8,
+formatOptions: {
+showIcon: true
+}
+},
+{
+columnMatch: "Signins",
+formatter: 8,
+formatOptions: {
+showIcon: true
+}
+}
+],
+rowLimit: 10000,
+filter: true
+}
+},
+customWidth: "30",
+conditionalVisibility: {
+parameterName: "policy",
+comparison: "isEqualTo",
+value: "All"
+},
+name: "User sign-in count - all enabled policies"
+},
+{
+type: 3,
+content: {
+version: "KqlItem/1.0",
+query: "SigninLogs
+| where TimeGenerated {TimeRange:value}
+| project ConditionalAccessPolicies, TimeGenerated, UserPrincipalName, AppDisplayName, CorrelationId, Status
+| where ConditionalAccessPolicies != "[]"
+| where '{user:escape}' == '*' or '{user:escape}' == UserPrincipalName
+| where "{User:escape}" == "All users" or UserPrincipalName has "{User:escape}"
+| where "{App:escape}" == "All apps" or AppDisplayName has "{App:escape}"
+| mv-expand ConditionalAccessPolicies
+| where ConditionalAccessPolicies["id"] == "{policy:escape}"
+| extend result = ConditionalAccessPolicies["result"], failureReason = tostring(Status["failureReason"])
+| project-away ConditionalAccessPolicies
+// filter by the result type selected
+// Total = any result type (the result type will contain the empty string "")
+// Success = result types containing "uccess" (includes "success" and "reportOnlySuccess")
+// Failure = result types containing "ailure" (includes "failure" and "reportOnlyFailure")
+// User action required = result types containing "nterrupt" (includes "interrupt" and "reportOnlyInterrupted")
+// Not applied = result types containing "ot" (includes "notApplied", "reportOnlyNotApplied", and "notEnabled")
+| extend filterResult = case("{resultName}" == "Total","", "{resultName}" == "Success", "uccess", "{resultName}" == "Failure", "ailure", "{resultName}" == "User action required", "nterrupted","ot")
+| where result contains filterResult
+| project TimeGenerated, UserPrincipalName, AppDisplayName, result, CorrelationId
+| sort by TimeGenerated desc",
+size: 0,
+showAnalytics: true,
+title: "Sign-in events - {resultName}",
+timeContextFromParameter: "TimeRange",
+showExportToExcel: true,
+queryType: 0,
+resourceType: "microsoft.operationalinsights/workspaces",
+crossComponentResources: [
+"{Workspace}"
+],
+gridSettings: {
+formatters: [
+{
+columnMatch: "Signins",
+formatter: 0,
+formatOptions: {
+showIcon: true,
+aggregation: "Count"
+}
+},
+{
+columnMatch: "combinedResult",
+formatter: 0,
+formatOptions: {
+showIcon: true,
+aggregation: "Count"
+}
+}
+],
+rowLimit: 1000,
+filter: true
+}
+},
+customWidth: "70",
+conditionalVisibility: {
+parameterName: "policy",
+comparison: "isNotEqualTo",
+value: "All"
+},
+name: "Sign-in details - individual policies"
+},
+{
+type: 3,
+content: {
+version: "KqlItem/1.0",
+query: "AADServicePrincipalSignInLogs
+| where TimeGenerated {TimeRange:value}
+| project ConditionalAccessStatus, TimeGenerated, ServicePrincipalId, ResourceDisplayName, CorrelationId
+| where '{sp:escape}' == '*' or '{sp:escape}' == ServicePrincipalId
+| where "{spid:escape}" == "All service principals" or ServicePrincipalId has "{spid:escape}"
+| where "{App:escape}" == "All apps" or ResourceDisplayName has "{App:escape}"
+| extend filterResult = case("{resultName}" == "Total","", "{resultName}" == "Success", "success", "{resultName}" == "Failure", "failure", "notApplied")
+| where ConditionalAccessStatus contains filterResult
+| project TimeGenerated, ServicePrincipalId, ResourceDisplayName, ConditionalAccessStatus, CorrelationId
+| sort by TimeGenerated desc",
+size: 0,
+showAnalytics: true,
+title: "Sign-in events - {resultName}",
+timeContextFromParameter: "TimeRange",
+showExportToExcel: true,
+queryType: 0,
+resourceType: "microsoft.operationalinsights/workspaces",
+crossComponentResources: [
+"{Workspace}"
+],
+gridSettings: {
+formatters: [
+{
+columnMatch: "Signins",
+formatter: 0,
+formatOptions: {
+showIcon: true,
+aggregation: "Count"
+}
+},
+{
+columnMatch: "combinedResult",
+formatter: 0,
+formatOptions: {
+showIcon: true,
+aggregation: "Count"
+}
+}
+],
+rowLimit: 10000,
+filter: true
+}
+},
+customWidth: "70",
+conditionalVisibility: {
+parameterName: "policy",
+comparison: "isEqualTo",
+value: "All"
+},
+name: "Sign-in details - all enabled policies"
+}
+]
+},
+conditionalVisibility: {
+parameterName: "identityType",
+comparison: "isEqualTo",
+value: "servicePrincipal"
+},
+name: "Service principal sign-ins tab"
+}
+],
+fallbackResourceIds: [
+"azure active directory"
+],
+fromTemplateId: "community-Workbooks/Azure Active Directory Conditional Access/Conditional Access Insights and Reporting",
+$schema: "https://github.com/Microsoft/Application-Insights-Workbooks/blob/master/schema/workbook.json"
+}
