@@ -70,7 +70,7 @@
             "type": 2,
             "isRequired": true,
             "query": "{\"version\":\"Merge/1.0\",\"merges\":[{\"id\":\"b1fc02b6-936d-4819-94e1-632ce186f047\",\"mergeType\":\"union\",\"leftTable\":\"query - 10\",\"rightTable\":\"query - User Collections\",\"leftColumn\":\"id\",\"rightColumn\":\"id\"}],\"projectRename\":[{\"originalName\":\"[query - 10].id\",\"mergedName\":\"id\",\"fromId\":\"b1fc02b6-936d-4819-94e1-632ce186f047\"},{\"originalName\":\"id\",\"mergedName\":\"id\",\"fromId\":\"unknown\"},{\"originalName\":\"name\",\"mergedName\":\"name\",\"fromId\":\"unknown\"},{\"originalName\":\"[query - User Collections].name\"}]}",
-            "value": "All",
+            "value": "242847fb-0af5-495f-86a4-cd7188842326",
             "typeSettings": {
               "additionalResourceOptions": [],
               "showDefault": false
@@ -153,7 +153,7 @@
           {
             "type": 1,
             "content": {
-              "json": "## Sign-In Logs"
+              "json": "# Sign-In Logs"
             },
             "name": "text - 4"
           },
@@ -197,12 +197,15 @@
             "type": 3,
             "content": {
               "version": "KqlItem/1.0",
-              "query": "//Find Auth Methods for filtered Group of Users\r\nlet MFAUsers=\r\nUserGroupCollection_CL\r\n| where TimeGenerated {TimeRange:value}\r\n| distinct id_g, upn_s, group_g\r\n| where group_g == \"{GroupSelection}\"\r\n| extend UserPrincipalName = tolower(upn_s);\r\nlet 2FASignIn=\r\nSigninLogs\r\n| where TimeGenerated {TimeRange:value}\r\n| where AuthenticationRequirement == \"multiFactorAuthentication\"\r\n| extend authMethod_ = tostring(MfaDetail.authMethod)\r\n| where authMethod_ != \"\"\r\n| where authMethod_ contains \"{AuthMethod}\";\r\nlet 2FA = 2FASignIn\r\n| join kind=inner MFAUsers on UserPrincipalName\r\n| summarize count() by UserPrincipalName, authMethod_;\r\nlet PWlessSignIn=\r\nSigninLogs\r\n| where TimeGenerated {TimeRange:value}\r\n| extend authMethod_ = tostring(parse_json(AuthenticationDetails)[0].authenticationMethod)\r\n| where authMethod_ == \"Windows Hello for Business\"\r\n| summarize count() by UserPrincipalName, authMethod_;\r\nlet PWless = PWlessSignIn\r\n| join kind=inner MFAUsers on UserPrincipalName\r\n| summarize count() by UserPrincipalName, authMethod_;\r\n2FA\r\n| union PWless\r\n",
+              "query": "//Find Auth Methods for filtered Group of Users\r\nlet MFAUsers=\r\nUserGroupCollection_CL\r\n| where TimeGenerated {TimeRange:value}\r\n| distinct id_g, upn_s, group_g\r\n| where group_g == \"{GroupSelection}\"\r\n| extend UserPrincipalName = tolower(upn_s);\r\nlet 2FASignIn=\r\nSigninLogs\r\n| where TimeGenerated {TimeRange:value}\r\n| where AuthenticationRequirement == \"multiFactorAuthentication\"\r\n| extend authMethod_ = tostring(MfaDetail.authMethod)\r\n| where authMethod_ != \"\"\r\n| where authMethod_ contains \"{AuthMethod}\";\r\nlet 2FA = 2FASignIn\r\n| join kind=inner MFAUsers on UserPrincipalName\r\n| summarize count() by UserPrincipalName, authMethod_;\r\nlet PWlessSignIn=\r\nSigninLogs\r\n| where TimeGenerated {TimeRange:value}\r\n| extend authMethod_ = tostring(parse_json(AuthenticationDetails)[0].authenticationMethod)\r\n| where authMethod_ == \"Windows Hello for Business\"\r\n| summarize count() by UserPrincipalName, authMethod_;\r\nlet PWless = PWlessSignIn\r\n| join kind=inner MFAUsers on UserPrincipalName\r\n| summarize count() by UserPrincipalName, authMethod_;\r\n2FA\r\n| union PWless\r\n| project-rename AuthenticationMethod = authMethod_, LoginNo = count_\r\n",
               "size": 3,
               "title": "SignIns by Auth Methods Count",
               "showExportToExcel": true,
               "queryType": 0,
-              "resourceType": "microsoft.operationalinsights/workspaces"
+              "resourceType": "microsoft.operationalinsights/workspaces",
+              "gridSettings": {
+                "filter": true
+              }
             },
             "customWidth": "67",
             "conditionalVisibility": {
@@ -216,13 +219,14 @@
             "type": 3,
             "content": {
               "version": "KqlItem/1.0",
-              "query": "//Find Auth Methods for filtered Group of Users\r\nlet MFAUsers=\r\nUserGroupCollection_CL\r\n| where TimeGenerated {TimeRange:value}\r\n| distinct id_g, upn_s, group_g\r\n| extend UserPrincipalName = tolower(upn_s);\r\nlet 2FASignIn=\r\nSigninLogs\r\n| where TimeGenerated {TimeRange:value}\r\n| where AuthenticationRequirement == \"multiFactorAuthentication\"\r\n| extend authMethod_ = tostring(MfaDetail.authMethod)\r\n| where authMethod_ != \"\"\r\n| where authMethod_ contains \"{AuthMethod}\";\r\nlet 2FA = 2FASignIn\r\n| join kind=inner MFAUsers on UserPrincipalName\r\n| summarize count() by UserPrincipalName, authMethod_;\r\nlet PWlessSignIn=\r\nSigninLogs\r\n| where TimeGenerated {TimeRange:value}\r\n| extend authMethod_ = tostring(parse_json(AuthenticationDetails)[0].authenticationMethod)\r\n| where authMethod_ == \"Windows Hello for Business\"\r\n| summarize count() by UserPrincipalName, authMethod_;\r\nlet PWless = PWlessSignIn\r\n| join kind=inner MFAUsers on UserPrincipalName\r\n| summarize count() by UserPrincipalName, authMethod_;\r\n2FA\r\n| union PWless\r\n",
+              "query": "//Find Auth Methods for filtered Group of Users\r\nlet MFAUsers=\r\nUserGroupCollection_CL\r\n| where TimeGenerated {TimeRange:value}\r\n| distinct id_g, upn_s, group_g\r\n| extend UserPrincipalName = tolower(upn_s);\r\nlet 2FASignIn=\r\nSigninLogs\r\n| where TimeGenerated {TimeRange:value}\r\n| where AuthenticationRequirement == \"multiFactorAuthentication\"\r\n| extend authMethod_ = tostring(MfaDetail.authMethod)\r\n| where authMethod_ != \"\"\r\n| where authMethod_ contains \"{AuthMethod}\";\r\nlet 2FA = 2FASignIn\r\n| join kind=inner MFAUsers on UserPrincipalName\r\n| summarize count() by UserPrincipalName, authMethod_;\r\nlet PWlessSignIn=\r\nSigninLogs\r\n| where TimeGenerated {TimeRange:value}\r\n| extend authMethod_ = tostring(parse_json(AuthenticationDetails)[0].authenticationMethod)\r\n| where authMethod_ == \"Windows Hello for Business\"\r\n| summarize count() by UserPrincipalName, authMethod_;\r\nlet PWless = PWlessSignIn\r\n| join kind=inner MFAUsers on UserPrincipalName\r\n| summarize count() by UserPrincipalName, authMethod_;\r\n2FA\r\n| union PWless\r\n| project-rename AuthenticationMethod = authMethod_, LoginNo = count_",
               "size": 1,
               "title": "SignIns by Auth Methods Count",
               "showExportToExcel": true,
               "queryType": 0,
               "resourceType": "microsoft.operationalinsights/workspaces",
               "gridSettings": {
+                "filter": true,
                 "sortBy": [
                   {
                     "itemKey": "UserPrincipalName",
@@ -248,8 +252,11 @@
           }
         ]
       },
-      "name": "group - 18",
+      "customWidth": "50",
+      "name": "Sign-In Logs",
       "styleSettings": {
+        "margin": "10px",
+        "padding": "5px",
         "showBorder": true
       }
     },
@@ -262,7 +269,188 @@
           {
             "type": 1,
             "content": {
-              "json": "## Auth Method Coverage"
+              "json": "# Auth Method Overview"
+            },
+            "name": "text - 0"
+          },
+          {
+            "type": 3,
+            "content": {
+              "version": "KqlItem/1.0",
+              "query": "//Find Auth Methods for filtered Group of Users\r\n// reference https://docs.microsoft.com/en-us/graph/api/resources/authenticationmethods-overview?view=graph-rest-beta#what-authentication-methods-can-be-managed-in-microsoft-graph\r\nlet AllUsers =\r\nUserGroupCollection_CL \r\n| where TimeGenerated {TimeRange:value}\r\n| where AuthMethod_s == \"#microsoft.graph.passwordAuthenticationMethod\"\r\n| distinct upn_s, AuthMethod_s;\r\nlet MFAUser = \r\nUserGroupCollection_CL \r\n| where TimeGenerated {TimeRange:value}\r\n| distinct upn_s, AuthMethod_s\r\n| where AuthMethod_s <> \"#microsoft.graph.passwordAuthenticationMethod\"\r\n| where AuthMethod_s <> \"\";\r\nAllUsers\r\n| join kind=leftouter MFAUser on upn_s\r\n| extend ANY = iff(AuthMethod_s1 <> \"\",\"registered\",\"unregistered\")\r\n| distinct upn_s, ANY\r\n| summarize count() by ANY\r\n| render piechart \r\n\r\n",
+              "size": 3,
+              "title": "Registered Auth Method ANY",
+              "queryType": 0,
+              "resourceType": "microsoft.operationalinsights/workspaces",
+              "gridSettings": {
+                "sortBy": [
+                  {
+                    "itemKey": "AuthMethod_s",
+                    "sortOrder": 2
+                  }
+                ]
+              },
+              "sortBy": [
+                {
+                  "itemKey": "AuthMethod_s",
+                  "sortOrder": 2
+                }
+              ],
+              "chartSettings": {
+                "seriesLabelSettings": [
+                  {
+                    "seriesName": "unregistered",
+                    "color": "orange"
+                  },
+                  {
+                    "seriesName": "registerd",
+                    "color": "blue"
+                  }
+                ]
+              }
+            },
+            "customWidth": "33",
+            "conditionalVisibility": {
+              "parameterName": "GroupSelection",
+              "comparison": "isEqualTo",
+              "value": "All"
+            },
+            "name": "query - Auth Methods Overview - only PW"
+          },
+          {
+            "type": 3,
+            "content": {
+              "version": "KqlItem/1.0",
+              "query": "//Find Auth Methods for filtered Group of Users\r\n// reference https://docs.microsoft.com/en-us/graph/api/resources/authenticationmethods-overview?view=graph-rest-beta#what-authentication-methods-can-be-managed-in-microsoft-graph\r\nlet AllUsers =\r\nUserGroupCollection_CL \r\n| where TimeGenerated {TimeRange:value}\r\n| where group_g == \"{GroupSelection}\"\r\n| where AuthMethod_s == \"#microsoft.graph.passwordAuthenticationMethod\"\r\n| distinct upn_s, AuthMethod_s;\r\nlet MFAUser = \r\nUserGroupCollection_CL \r\n| where TimeGenerated {TimeRange:value}\r\n| distinct upn_s, AuthMethod_s\r\n| where AuthMethod_s <> \"#microsoft.graph.passwordAuthenticationMethod\"\r\n| where AuthMethod_s <> \"\";\r\nAllUsers\r\n| join kind=leftouter MFAUser on upn_s\r\n| extend ANY = iff(AuthMethod_s1 <> \"\",\"registered\",\"unregistered\")\r\n| distinct upn_s, ANY\r\n| summarize count() by ANY\r\n| render piechart \r\n\r\n",
+              "size": 3,
+              "title": "Registered Auth Method ANY",
+              "queryType": 0,
+              "resourceType": "microsoft.operationalinsights/workspaces",
+              "gridSettings": {
+                "sortBy": [
+                  {
+                    "itemKey": "AuthMethod_s",
+                    "sortOrder": 2
+                  }
+                ]
+              },
+              "sortBy": [
+                {
+                  "itemKey": "AuthMethod_s",
+                  "sortOrder": 2
+                }
+              ],
+              "chartSettings": {
+                "seriesLabelSettings": [
+                  {
+                    "seriesName": "unregistered",
+                    "color": "orange"
+                  },
+                  {
+                    "seriesName": "registerd",
+                    "color": "blue"
+                  }
+                ]
+              }
+            },
+            "customWidth": "33",
+            "conditionalVisibility": {
+              "parameterName": "GroupSelection",
+              "comparison": "isNotEqualTo",
+              "value": "All"
+            },
+            "name": "query - Auth Methods Overview - only PW - Copy"
+          },
+          {
+            "type": 3,
+            "content": {
+              "version": "KqlItem/1.0",
+              "query": "//Find Auth Methods for filtered Group of Users\r\n// reference https://docs.microsoft.com/en-us/graph/api/resources/authenticationmethods-overview?view=graph-rest-beta#what-authentication-methods-can-be-managed-in-microsoft-graph\r\nlet AllUsers =\r\nUserGroupCollection_CL \r\n| where TimeGenerated {TimeRange:value}\r\n| where group_g == \"{GroupSelection}\"\r\n| where AuthMethod_s == \"#microsoft.graph.passwordAuthenticationMethod\"\r\n| distinct upn_s, AuthMethod_s, groupname_s\r\n| where groupname_s <> \"\";\r\nlet MFAUser = \r\nUserGroupCollection_CL \r\n| where TimeGenerated {TimeRange:value}\r\n| distinct upn_s, AuthMethod_s, groupname_s\r\n| where AuthMethod_s <> \"#microsoft.graph.passwordAuthenticationMethod\"\r\n| where AuthMethod_s <> \"\";\r\nAllUsers\r\n| join kind=leftouter MFAUser on upn_s\r\n| extend ANY = iff(AuthMethod_s1 <> \"\",\"registered\",\"unregistered\")\r\n| distinct upn_s, groupname_s, ANY\r\n| where ANY == \"unregistered\"\r\n| project-rename UserPrincipalName = upn_s, GroupName = groupname_s, Status = ANY\r\n\r\n\r\n",
+              "size": 3,
+              "title": "Unregistered User",
+              "showExportToExcel": true,
+              "queryType": 0,
+              "resourceType": "microsoft.operationalinsights/workspaces",
+              "gridSettings": {
+                "filter": true
+              },
+              "sortBy": [],
+              "chartSettings": {
+                "seriesLabelSettings": [
+                  {
+                    "seriesName": "unregistered",
+                    "color": "orange"
+                  },
+                  {
+                    "seriesName": "registerd",
+                    "color": "blue"
+                  }
+                ]
+              }
+            },
+            "customWidth": "67",
+            "conditionalVisibility": {
+              "parameterName": "GroupSelection",
+              "comparison": "isNotEqualTo",
+              "value": "All"
+            },
+            "name": "query - Auth Methods Overview - only PW - Copy - Copy"
+          },
+          {
+            "type": 3,
+            "content": {
+              "version": "KqlItem/1.0",
+              "query": "//Find Auth Methods for filtered Group of Users\r\n// reference https://docs.microsoft.com/en-us/graph/api/resources/authenticationmethods-overview?view=graph-rest-beta#what-authentication-methods-can-be-managed-in-microsoft-graph\r\nlet AllUsers =\r\nUserGroupCollection_CL \r\n| where TimeGenerated {TimeRange:value}\r\n| where AuthMethod_s == \"#microsoft.graph.passwordAuthenticationMethod\"\r\n| distinct upn_s, AuthMethod_s, groupname_s\r\n| where groupname_s <> \"\";\r\nlet MFAUser = \r\nUserGroupCollection_CL \r\n| where TimeGenerated {TimeRange:value}\r\n| distinct upn_s, AuthMethod_s, groupname_s\r\n| where AuthMethod_s <> \"#microsoft.graph.passwordAuthenticationMethod\"\r\n| where AuthMethod_s <> \"\";\r\nAllUsers\r\n| join kind=leftouter MFAUser on upn_s\r\n| extend ANY = iff(AuthMethod_s1 <> \"\",\"registered\",\"unregistered\")\r\n| distinct upn_s, groupname_s, ANY\r\n| where ANY == \"unregistered\"\r\n| project-rename UserPrincipalName = upn_s, GroupName = groupname_s, Status = ANY\r\n\r\n",
+              "size": 3,
+              "title": "Unregistered User",
+              "showExportToExcel": true,
+              "queryType": 0,
+              "resourceType": "microsoft.operationalinsights/workspaces",
+              "gridSettings": {
+                "filter": true
+              },
+              "sortBy": [],
+              "chartSettings": {
+                "seriesLabelSettings": [
+                  {
+                    "seriesName": "unregistered",
+                    "color": "orange"
+                  },
+                  {
+                    "seriesName": "registerd",
+                    "color": "blue"
+                  }
+                ]
+              }
+            },
+            "customWidth": "67",
+            "conditionalVisibility": {
+              "parameterName": "GroupSelection",
+              "comparison": "isEqualTo",
+              "value": "All"
+            },
+            "name": "query - Auth Methods Overview - only PW - Copy - Copy - Copy"
+          }
+        ]
+      },
+      "customWidth": "50",
+      "name": "Auth Method Overview",
+      "styleSettings": {
+        "margin": "10px",
+        "padding": "5px",
+        "showBorder": true
+      }
+    },
+    {
+      "type": 12,
+      "content": {
+        "version": "NotebookGroup/1.0",
+        "groupType": "editable",
+        "items": [
+          {
+            "type": 1,
+            "content": {
+              "json": "# Auth Method Coverage"
             },
             "name": "text - 8"
           },
@@ -620,8 +808,9 @@
           }
         ]
       },
-      "name": "group - 15",
+      "name": "Auth Method Coverage",
       "styleSettings": {
+        "padding": "5px",
         "showBorder": true
       }
     }
