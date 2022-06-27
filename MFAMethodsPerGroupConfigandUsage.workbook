@@ -46,7 +46,7 @@
       "type": 3,
       "content": {
         "version": "KqlItem/1.0",
-        "query": "{\"version\":\"1.0.0\",\"content\":\"[\\r\\n   {\\r\\n      \\\"id\\\":\\\" \\\",\\r\\n      \\\"name\\\":\\\"All Auth Methods\\\"\\r\\n   },\\r\\n   {\\r\\n      \\\"id\\\":\\\"Mobile app notification\\\",\\r\\n      \\\"name\\\":\\\"Mobile app notification\\\"\\r\\n   },\\r\\n\\t{\\r\\n\\t\\t\\\"id\\\":\\\"Text message\\\",\\r\\n\\t\\t\\\"name\\\":\\\"Text message\\\"\\r\\n\\t},\\r\\n\\t{\\r\\n\\t\\t\\\"id\\\":\\\"OATH verification code\\\",\\r\\n\\t\\t\\\"name\\\":\\\"OATH verification code\\\"\\r\\n\\t},\\r\\n\\t{\\r\\n\\t\\t\\\"id\\\":\\\"Phone call approval (Authentication phone)\\\",\\r\\n\\t\\t\\\"name\\\":\\\"Phone call approval (Authentication phone)\\\"\\r\\n\\t}\\r\\n]\",\"transformers\":null}",
+        "query": "{\"version\":\"1.0.0\",\"content\":\"[\\r\\n   {\\r\\n      \\\"id\\\":\\\" \\\",\\r\\n      \\\"name\\\":\\\"All Auth Methods\\\"\\r\\n   },\\r\\n   {\\r\\n      \\\"id\\\":\\\"Mobile app notification\\\",\\r\\n      \\\"name\\\":\\\"Mobile app notification\\\"\\r\\n   },\\r\\n\\t{\\r\\n\\t\\t\\\"id\\\":\\\"Text message\\\",\\r\\n\\t\\t\\\"name\\\":\\\"Text message\\\"\\r\\n\\t},\\r\\n\\t{\\r\\n\\t\\t\\\"id\\\":\\\"OATH verification code\\\",\\r\\n\\t\\t\\\"name\\\":\\\"OATH verification code\\\"\\r\\n\\t},\\r\\n\\t{\\r\\n\\t\\t\\\"id\\\":\\\"Phone call approval (Authentication phone)\\\",\\r\\n\\t\\t\\\"name\\\":\\\"Phone call approval (Authentication phone)\\\"\\r\\n\\t},\\r\\n\\r\\n\\t{\\r\\n\\t\\t\\\"id\\\":\\\"Phone call approval (Office phone)\\\",\\r\\n\\t\\t\\\"name\\\":\\\"Phone call approval (Office phone)\\\"\\r\\n\\t}\\r\\n]\",\"transformers\":null}",
         "size": 0,
         "queryType": 8
       },
@@ -70,7 +70,7 @@
             "type": 2,
             "isRequired": true,
             "query": "{\"version\":\"Merge/1.0\",\"merges\":[{\"id\":\"b1fc02b6-936d-4819-94e1-632ce186f047\",\"mergeType\":\"union\",\"leftTable\":\"query - 10\",\"rightTable\":\"query - User Collections\",\"leftColumn\":\"id\",\"rightColumn\":\"id\"}],\"projectRename\":[{\"originalName\":\"[query - 10].id\",\"mergedName\":\"id\",\"fromId\":\"b1fc02b6-936d-4819-94e1-632ce186f047\"},{\"originalName\":\"id\",\"mergedName\":\"id\",\"fromId\":\"unknown\"},{\"originalName\":\"name\",\"mergedName\":\"name\",\"fromId\":\"unknown\"},{\"originalName\":\"[query - User Collections].name\"}]}",
-            "value": "2f47bcae-3e01-4e01-a488-da5796b97e25",
+            "value": "f9355cbb-2779-4cf8-98c0-93bcc15ae4df",
             "typeSettings": {
               "additionalResourceOptions": [],
               "showDefault": false
@@ -130,7 +130,7 @@
             "label": "Auth Method",
             "type": 2,
             "query": "{\"version\":\"Merge/1.0\",\"merges\":[{\"id\":\"1c76290b-fee2-4e78-bf7a-37dfc6cd80c7\",\"mergeType\":\"table\",\"leftTable\":\"query - Auth Methods\"}],\"projectRename\":[{\"originalName\":\"[query - Auth Methods].id\",\"mergedName\":\"id\",\"fromId\":\"1c76290b-fee2-4e78-bf7a-37dfc6cd80c7\"},{\"originalName\":\"[query - Auth Methods].name\",\"mergedName\":\"name\",\"fromId\":\"1c76290b-fee2-4e78-bf7a-37dfc6cd80c7\"}]}",
-            "value": "Text message",
+            "value": " ",
             "typeSettings": {
               "additionalResourceOptions": [],
               "showDefault": false
@@ -347,7 +347,7 @@
                     "color": "orange"
                   },
                   {
-                    "seriesName": "registerd",
+                    "seriesName": "registered",
                     "color": "blue"
                   }
                 ]
