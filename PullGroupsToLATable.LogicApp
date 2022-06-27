@@ -577,9 +577,9 @@
         "$connections": {
             "value": {
                 "azureloganalyticsdatacollector": {
-                    "connectionId": "/subscriptions/bbb7594a-30e2-4928-9631-0588321da565/resourceGroups/Dojo/providers/Microsoft.Web/connections/azureloganalyticsdatacollector",
+                    "connectionId": "your-connection-id",
                     "connectionName": "azureloganalyticsdatacollector",
-                    "id": "/subscriptions/bbb7594a-30e2-4928-9631-0588321da565/providers/Microsoft.Web/locations/centralus/managedApis/azureloganalyticsdatacollector"
+                    "id": "your-id"
                 }
             }
         }
