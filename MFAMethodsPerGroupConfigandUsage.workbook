@@ -70,7 +70,7 @@
             "type": 2,
             "isRequired": true,
             "query": "{\"version\":\"Merge/1.0\",\"merges\":[{\"id\":\"b1fc02b6-936d-4819-94e1-632ce186f047\",\"mergeType\":\"union\",\"leftTable\":\"query - 10\",\"rightTable\":\"query - User Collections\",\"leftColumn\":\"id\",\"rightColumn\":\"id\"}],\"projectRename\":[{\"originalName\":\"[query - 10].id\",\"mergedName\":\"id\",\"fromId\":\"b1fc02b6-936d-4819-94e1-632ce186f047\"},{\"originalName\":\"id\",\"mergedName\":\"id\",\"fromId\":\"unknown\"},{\"originalName\":\"name\",\"mergedName\":\"name\",\"fromId\":\"unknown\"},{\"originalName\":\"[query - User Collections].name\"}]}",
-            "value": "f9355cbb-2779-4cf8-98c0-93bcc15ae4df",
+            "value": "All",
             "typeSettings": {
               "additionalResourceOptions": [],
               "showDefault": false
@@ -88,7 +88,7 @@
             "type": 4,
             "isRequired": true,
             "value": {
-              "durationMs": 7776000000
+              "durationMs": 172800000
             },
             "typeSettings": {
               "selectableValues": [
@@ -303,7 +303,7 @@
                     "color": "orange"
                   },
                   {
-                    "seriesName": "registerd",
+                    "seriesName": "registered",
                     "color": "blue"
                   }
                 ]
@@ -666,7 +666,7 @@
                     "color": "orange"
                   },
                   {
-                    "seriesName": "registerd",
+                    "seriesName": "registered",
                     "color": "blue"
                   }
                 ]
