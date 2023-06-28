@@ -657,9 +657,9 @@
                     "$connections": {
                         "value": {
                             "azureloganalyticsdatacollector": {
-                                "connectionId": "your-connection-id",
-                                "connectionName": "azureloganalyticsdatacollector",
-                                "id": "your-id"
+                                "connectionId": "[variables('LAWSConnectionId')]",
+                                "connectionName": "[parameters('LAWSConnectionName')]",
+                                "id": "[variables('LAWSConnectionApiId')]"
                             }
                         }
                     }
