@@ -118,7 +118,6 @@
                                             "inputs": {
                                                 "authentication": {
                                                     "audience": "https://graph.microsoft.com",
-                                                    "identity": "/subscriptions/bbb7594a-30e2-4928-9631-0588321da565/resourceGroups/dojo/providers/Microsoft.ManagedIdentity/userAssignedIdentities/pullgroupstolatableauth",
                                                     "type": "ManagedServiceIdentity"
                                                 },
                                                 "method": "GET",
@@ -131,7 +130,6 @@
                                             "inputs": {
                                                 "authentication": {
                                                     "audience": "https://graph.microsoft.com",
-                                                    "identity": "/subscriptions/bbb7594a-30e2-4928-9631-0588321da565/resourceGroups/dojo/providers/Microsoft.ManagedIdentity/userAssignedIdentities/pullgroupstolatableauth",
                                                     "type": "ManagedServiceIdentity"
                                                 },
                                                 "method": "GET",
@@ -353,7 +351,6 @@
                                     "inputs": {
                                         "authentication": {
                                             "audience": "https://graph.microsoft.com",
-                                            "identity": "/subscriptions/bbb7594a-30e2-4928-9631-0588321da565/resourceGroups/dojo/providers/Microsoft.ManagedIdentity/userAssignedIdentities/pullgroupstolatableauth",
                                             "type": "ManagedServiceIdentity"
                                         },
                                         "method": "GET",
@@ -366,7 +363,6 @@
                                     "inputs": {
                                         "authentication": {
                                             "audience": "https://graph.microsoft.com",
-                                            "identity": "/subscriptions/bbb7594a-30e2-4928-9631-0588321da565/resourceGroups/dojo/providers/Microsoft.ManagedIdentity/userAssignedIdentities/pullgroupstolatableauth",
                                             "type": "ManagedServiceIdentity"
                                         },
                                         "method": "GET",
