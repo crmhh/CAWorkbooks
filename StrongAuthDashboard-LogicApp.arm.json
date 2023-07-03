@@ -31,15 +31,14 @@
             "type": "securestring"
         },
         "IdOfTheFirstGroupInScope": {
-            "defaultValue": "",
+            "defaultValue": ["00000000-0000-0000-0000-000000000000"],
             "type": "array"
         }
     },
     "variables": {
         "LAWSConnectionId": "[concat(resourceGroup().id, '/providers/Microsoft.Web/connections/', parameters('LAWSConnectionName'))]",
         "LAWSConnectionApiId": "[concat(subscription().id, '/providers/Microsoft.Web/locations/', resourceGroup().location, '/managedApis/azureloganalyticsdatacollector')]",
-        "WorkbookSourceId" : "[concat('/subscriptions/', parameters('LAWSSubscriptionId'), '/resourcegroups/', parameters('LAWSResourceGroup'), '/providers/microsoft.operationalinsights/workspaces/', parameters('LogAnalyticsWorkspaceName'))]",
-        "GroupIDs" : "[split(parameters('IdOfTheFirstGroupInScope'), ',')]"
+        "WorkbookSourceId" : "[concat('/subscriptions/', parameters('LAWSSubscriptionId'), '/resourcegroups/', parameters('LAWSResourceGroup'), '/providers/microsoft.operationalinsights/workspaces/', parameters('LogAnalyticsWorkspaceName'))]"
     },
     "resources": [
         {
@@ -613,7 +612,7 @@
                         },
                         "Parse_JSON": {
                             "inputs": {
-                                "content": "@variables('GroupIDs')",
+                                "content": "[parameters('IdOfTheFirstGroupInScope')]",
                                 "schema": {
                                     "items": {
                                         "type": "string"
