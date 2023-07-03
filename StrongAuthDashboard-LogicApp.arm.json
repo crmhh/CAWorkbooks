@@ -14,19 +14,23 @@
             "defaultValue": "",
             "type": "string"
         },
-        "LAWSResourceGroup": {
+        "LogAnalyticsWorkspaceResourceGroup": {
             "defaultValue": "",
             "type": "string"
         },
-        "LAWSSubscriptionId": {
+        "LogAnalyticsWorkspaceSubscriptionId": {
             "defaultValue": "",
             "type": "string"
         },
-        "LAWSConnectionName": {
+        "LogAnalyticsWorkspaceConnectionName": {
             "defaultValue": "connection-Import-StrongAuthDashboadData",
             "type": "string"
         },
         "LogAnalyticsWorkspaceKey": {
+            "defaultValue": "",
+            "type": "securestring"
+        },
+        "IdOfTheFirstGroupInScope": {
             "defaultValue": "",
             "type": "securestring"
         }
@@ -34,7 +38,8 @@
     "variables": {
         "LAWSConnectionId": "[concat(resourceGroup().id, '/providers/Microsoft.Web/connections/', parameters('LAWSConnectionName'))]",
         "LAWSConnectionApiId": "[concat(subscription().id, '/providers/Microsoft.Web/locations/', resourceGroup().location, '/managedApis/azureloganalyticsdatacollector')]",
-        "WorkbookSourceId" : "[concat('/subscriptions/', parameters('LAWSSubscriptionId'), '/resourcegroups/', parameters('LAWSResourceGroup'), '/providers/microsoft.operationalinsights/workspaces/', parameters('LogAnalyticsWorkspaceName'))]"
+        "WorkbookSourceId" : "[concat('/subscriptions/', parameters('LAWSSubscriptionId'), '/resourcegroups/', parameters('LAWSResourceGroup'), '/providers/microsoft.operationalinsights/workspaces/', parameters('LogAnalyticsWorkspaceName'))]",
+        "GroupIDs" : "[concat('[', parameters('IdOfTheFirstGroupInScope') ']')]"
     },
     "resources": [
         {
@@ -599,10 +604,7 @@
                                     {
                                         "name": "GroupIDs",
                                         "type": "array",
-                                        "value": [
-                                            "1",
-                                            "2"
-                                        ]
+                                        "value": "[variables('GroupIDs')]"
                                     }
                                 ]
                             },
