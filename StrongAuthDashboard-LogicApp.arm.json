@@ -14,15 +14,15 @@
             "defaultValue": "",
             "type": "string"
         },
-        "LogAnalyticsWorkspaceResourceGroup": {
+        "LAWSResourceGroup": {
             "defaultValue": "",
             "type": "string"
         },
-        "LogAnalyticsWorkspaceSubscriptionId": {
+        "LAWSSubscriptionId": {
             "defaultValue": "",
             "type": "string"
         },
-        "LogAnalyticsWorkspaceConnectionName": {
+        "LAWSConnectionName": {
             "defaultValue": "connection-Import-StrongAuthDashboadData",
             "type": "string"
         },
