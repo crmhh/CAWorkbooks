@@ -39,7 +39,7 @@
         "LAWSConnectionId": "[concat(resourceGroup().id, '/providers/Microsoft.Web/connections/', parameters('LAWSConnectionName'))]",
         "LAWSConnectionApiId": "[concat(subscription().id, '/providers/Microsoft.Web/locations/', resourceGroup().location, '/managedApis/azureloganalyticsdatacollector')]",
         "WorkbookSourceId" : "[concat('/subscriptions/', parameters('LAWSSubscriptionId'), '/resourcegroups/', parameters('LAWSResourceGroup'), '/providers/microsoft.operationalinsights/workspaces/', parameters('LogAnalyticsWorkspaceName'))]",
-        "GroupIDs" : "[concat('[', parameters('IdOfTheFirstGroupInScope') ']')]"
+        "GroupIDs" : "[concat('[', parameters('IdOfTheFirstGroupInScope'), ']')]"
     },
     "resources": [
         {
