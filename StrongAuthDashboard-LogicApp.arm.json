@@ -32,7 +32,7 @@
         },
         "IdOfTheFirstGroupInScope": {
             "defaultValue": "",
-            "type": "securestring"
+            "type": "string"
         }
     },
     "variables": {
