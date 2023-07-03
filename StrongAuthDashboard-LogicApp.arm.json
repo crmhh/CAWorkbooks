@@ -603,7 +603,7 @@
                                     {
                                         "name": "GroupIDs",
                                         "type": "array",
-                                        "value": "[variables('GroupIDs')]"
+                                        "value": "[parameters('IdOfTheFirstGroupInScope')]"
                                     }
                                 ]
                             },
@@ -612,7 +612,7 @@
                         },
                         "Parse_JSON": {
                             "inputs": {
-                                "content": "[parameters('IdOfTheFirstGroupInScope')]",
+                                "content": "@variables('GroupIDs')",
                                 "schema": {
                                     "items": {
                                         "type": "string"
