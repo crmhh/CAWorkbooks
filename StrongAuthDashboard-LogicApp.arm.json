@@ -118,7 +118,7 @@
                                             },
                                             "type": "Foreach"
                                         },
-                                        "HTTP": {
+                                        "HTTP_-_Get_Methods": {
                                             "inputs": {
                                                 "authentication": {
                                                     "audience": "https://graph.microsoft.com",
@@ -127,20 +127,8 @@
                                                 "method": "GET",
                                                 "uri": "https://graph.microsoft.com/beta/users/@{items('For_each_Member')?['userPrincipalName']}/authentication/methods"
                                             },
-                                            "runAfter": {},
-                                            "type": "Http"
-                                        },
-                                        "HTTP_-_Get_Auth_Methods": {
-                                            "inputs": {
-                                                "authentication": {
-                                                    "audience": "https://graph.microsoft.com",
-                                                    "type": "ManagedServiceIdentity"
-                                                },
-                                                "method": "GET",
-                                                "uri": "https://graph.microsoft.com/beta/reports/credentialUserRegistrationDetails?$filter=userPrincipalName eq '@{items('For_each_Member')?['userPrincipalName']}'"
-                                            },
                                             "runAfter": {
-                                                "For_each_Auth_Method": [
+                                                "Parse_JSON_3": [
                                                     "Succeeded"
                                                 ]
                                             },
@@ -148,7 +136,7 @@
                                         },
                                         "Parse_JSON_2": {
                                             "inputs": {
-                                                "content": "@body('HTTP')",
+                                                "content": "@body('HTTP_-_Get_Methods')",
                                                 "schema": {
                                                     "properties": {
                                                         "body": {
@@ -236,113 +224,51 @@
                                                 }
                                             },
                                             "runAfter": {
-                                                "HTTP": [
+                                                "HTTP_-_Get_Methods": [
                                                     "Succeeded"
                                                 ]
                                             },
                                             "type": "ParseJson"
                                         },
-                                        "Parse_JSON__Auth_Methods": {
+                                        "HTTP_-_Get_Prefs": {
                                             "inputs": {
-                                                "content": "@body('HTTP_-_Get_Auth_Methods')",
+                                                "authentication": {
+                                                    "audience": "https://graph.microsoft.com",
+                                                    "type": "ManagedServiceIdentity"
+                                                },
+                                                "method": "GET",
+                                                "uri": "https://graph.microsoft.com/beta/users/@{items('For_each_Member')?['userPrincipalName']}/authentication/signInPreferences"
+                                            },
+                                            "runAfter": {},
+                                            "type": "Http"
+                                        },
+                                        "Parse_JSON_3": {
+                                            "inputs": {
+                                                "content": "@body('HTTP_-_Get_Prefs')",
                                                 "schema": {
                                                     "properties": {
-                                                        "body": {
-                                                            "properties": {
-                                                                "@@odata.context": {
-                                                                    "type": "string"
-                                                                },
-                                                                "value": {
-                                                                    "items": {
-                                                                        "properties": {
-                                                                            "id": {
-                                                                                "type": "string"
-                                                                            },
-                                                                            "isCapable": {
-                                                                                "type": "boolean"
-                                                                            },
-                                                                            "isEnabled": {
-                                                                                "type": "boolean"
-                                                                            },
-                                                                            "isMfaRegistered": {
-                                                                                "type": "boolean"
-                                                                            },
-                                                                            "isRegistered": {
-                                                                                "type": "boolean"
-                                                                            },
-                                                                            "userDisplayName": {
-                                                                                "type": "string"
-                                                                            },
-                                                                            "userPrincipalName": {
-                                                                                "type": "string"
-                                                                            }
-                                                                        },
-                                                                        "required": [
-                                                                            "id",
-                                                                            "userPrincipalName",
-                                                                            "userDisplayName",
-                                                                            "isRegistered",
-                                                                            "isEnabled",
-                                                                            "isCapable",
-                                                                            "isMfaRegistered"
-                                                                        ],
-                                                                        "type": "object"
-                                                                    },
-                                                                    "type": "array"
-                                                                }
-                                                            },
-                                                            "type": "object"
+                                                        "@@odata.context": {
+                                                            "type": "string"
                                                         },
-                                                        "headers": {
-                                                            "properties": {
-                                                                "Content-Length": {
-                                                                    "type": "string"
-                                                                },
-                                                                "Content-Type": {
-                                                                    "type": "string"
-                                                                },
-                                                                "Date": {
-                                                                    "type": "string"
-                                                                },
-                                                                "OData-Version": {
-                                                                    "type": "string"
-                                                                },
-                                                                "Strict-Transport-Security": {
-                                                                    "type": "string"
-                                                                },
-                                                                "Transfer-Encoding": {
-                                                                    "type": "string"
-                                                                },
-                                                                "Vary": {
-                                                                    "type": "string"
-                                                                },
-                                                                "client-request-id": {
-                                                                    "type": "string"
-                                                                },
-                                                                "request-id": {
-                                                                    "type": "string"
-                                                                },
-                                                                "x-ms-ags-diagnostic": {
-                                                                    "type": "string"
-                                                                }
-                                                            },
-                                                            "type": "object"
+                                                        "isSystemPreferredAuthenticationMethodEnabled": {
+                                                            "type": "boolean"
                                                         },
-                                                        "statusCode": {
-                                                            "type": "integer"
+                                                        "systemPreferredAuthenticationMethod": {},
+                                                        "userPreferredMethodForSecondaryAuthentication": {
+                                                            "type": "string"
                                                         }
                                                     },
                                                     "type": "object"
                                                 }
                                             },
                                             "runAfter": {
-                                                "HTTP_-_Get_Auth_Methods": [
+                                                "HTTP_-_Get_Prefs": [
                                                     "Succeeded"
                                                 ]
                                             },
                                             "type": "ParseJson"
                                         }
-                                    },
+                                    },                                                               
                                     "foreach": "@body('Parse_JSON_-_Member')?['value']",
                                     "runAfter": {
                                         "Parse_JSON_-_Member": [
@@ -377,6 +303,11 @@
                                             "Succeeded"
                                         ]
                                     },
+                                    "runtimeConfiguration": {
+                                        "paginationPolicy": {
+                                            "minimumItemCount": 10000
+                                        }
+                                    },         
                                     "type": "Http"
                                 },
                                 "Parse_JSON_-_Member": {
