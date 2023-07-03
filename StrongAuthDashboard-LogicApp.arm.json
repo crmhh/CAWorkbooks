@@ -14,10 +14,6 @@
             "defaultValue": "",
             "type": "string"
         },
-        "LogAnalyticsWorkspaceKey": {
-            "defaultValue": "",
-            "type": "securestring"
-        },
         "LAWSResourceGroup": {
             "defaultValue": "",
             "type": "string"
@@ -29,6 +25,10 @@
         "LAWSConnectionName": {
             "defaultValue": "connection-Import-StrongAuthDashboadData",
             "type": "string"
+        },
+        "LogAnalyticsWorkspaceKey": {
+            "defaultValue": "",
+            "type": "securestring"
         }
     },
     "variables": {
