@@ -110,9 +110,9 @@
                                                     "type": "ApiConnection"
                                                 }
                                             },
-                                            "foreach": "@body('Parse_JSON_2')?['value']",
+                                            "foreach": "@body('Parse_JSON_Methods')?['value']",
                                             "runAfter": {
-                                                "Parse_JSON_2": [
+                                                "Parse_JSON_Methods": [
                                                     "Succeeded"
                                                 ]
                                             },
@@ -128,13 +128,13 @@
                                                 "uri": "https://graph.microsoft.com/beta/users/@{items('For_each_Member')?['userPrincipalName']}/authentication/methods"
                                             },
                                             "runAfter": {
-                                                "Parse_JSON_3": [
+                                                "Parse_JSON_Prefs": [
                                                     "Succeeded"
                                                 ]
                                             },
                                             "type": "Http"
                                         },
-                                        "Parse_JSON_2": {
+                                        "Parse_JSON_Methods": {
                                             "inputs": {
                                                 "content": "@body('HTTP_-_Get_Methods')",
                                                 "schema": {
@@ -242,7 +242,7 @@
                                             "runAfter": {},
                                             "type": "Http"
                                         },
-                                        "Parse_JSON_3": {
+                                        "Parse_JSON_Prefs": {
                                             "inputs": {
                                                 "content": "@body('HTTP_-_Get_Prefs')",
                                                 "schema": {
