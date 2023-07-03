@@ -30,7 +30,7 @@
             "defaultValue": "",
             "type": "securestring"
         },
-        "IdOfTheFirstGroupInScope": {
+        "GroupIdsInScope": {
             "defaultValue": ["00000000-0000-0000-0000-000000000000"],
             "type": "array"
         }
@@ -603,7 +603,7 @@
                                     {
                                         "name": "GroupIDs",
                                         "type": "array",
-                                        "value": "[parameters('IdOfTheFirstGroupInScope')]"
+                                        "value": "[parameters('GroupIdsInScope')]"
                                     }
                                 ]
                             },
