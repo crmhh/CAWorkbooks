@@ -40,4 +40,4 @@ After the assignment of the permissions you can enable the Logic App and the fir
 
 [![deploy2azure](https://aka.ms/deploytoazurebutton)](https://portal.azure.com/#create/Microsoft.Template/uri/https%3A%2F%2Fraw.githubusercontent.com%2Fcrmhh%2FCAWorkbooks%2Fmain%2Fconfig%2Fdeploy%2FStrongAuthDashboard.arm.json)
 
-<img src="/media/CustomDeploymentWorkbook.png" alt="alt text" width="350" height="350">
+<img src="/media/CustomDeploymentWorkbook.png" alt="alt text" width="350">
