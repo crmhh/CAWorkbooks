@@ -68,6 +68,7 @@ The last step is the deployment of the workbook.
 [![deploy2azure](https://aka.ms/deploytoazurebutton)](https://portal.azure.com/#create/Microsoft.Template/uri/https%3A%2F%2Fraw.githubusercontent.com%2Fcrmhh%2FCAWorkbooks%2Fmain%2Fconfig%2Fdeploy%2FStrongAuthDashboard.arm.json)
 
 For the deployment you will only need to choose the Resource Group for the workbook and no additional permissions are needed:
+
 <img src="/media/CustomDeploymentWorkbook.png" alt="alt text" width="300">
 
 ### Usage
