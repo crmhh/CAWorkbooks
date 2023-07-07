@@ -1,19 +1,36 @@
 # CAWorkbooks
 ## Strong Authentication Dashboard
-A granular dashboard can easy be deployed to a customer environment needing a Logic App and a Workbook. For a detailed overview see this [blogpost](https://chris-brumm.medium.com/implementing-an-advanced-authentication-methods-dashboard-bcb83ebbef95) 
+Strong authentication is one of the core pillars of any (cloud) security strategy and various functions rely on the authenticity of the accessing users. So it makes a lot of sense to work on this topic continuously.
 
+Looking at an environment I always ask myself a few questions:
+* Which users have not registered any MFA method yet?
+* Which Authentication Methods are used by your users?
+* Which Authentication Methods are registered by your users?
+
+Fortunately, the AAD already contains the Authentication methods report which answers the questions and in small environments the problem is largely solved.
+
+In large environments, however, it is usually not sufficient to look at the totality of all users and so these questions arise for individual groups of users. Additionally the questions arise:
+* How effective are my measures to improve the situation?
+* How big is the impact if I prohibit weaker methods (for example with Authentication Strength)?
+* In which locations / departments / … is my rollout going well?
+* What is the percentage of accounts that require exceptions or special handling, such as service accounts or teams rooms systems?
+
+For a complex rollout, I need a flexible tool that allows me to examine the current situation for individual user groups and display trends. The use of workbooks, instead of e.g. PowerBI, is ideal here, as the workbooks are already integrated into the existing admin interface and the existing administration concept takes effect.
+
+Workbooks have the possibility to use APIs and Log Analytic Workspaces as data sources. In order to have a good performance even with a high number of users, I have decided to rely exclusively on log analytics and to have the necessary data written periodically by a logic app. This also enables a historization of the data, which allows us, for example, to display a progression over time.
+
+### Overview and Architecture
+Here is a first impression on the workbook in action:
 ![StrongAuthDashboardDemo](/media/StrongAuthDashboardDemo.gif)
 
-
+The used data in the workbook is periodically collected by a Logic App from the Graph API and stored in your Log Analytics Workspace:
 ![Overview Auth Method Dashboard](/media/OverviewAuthMethodDashboard.png)
-![Auth Method Dashboard](/media/AuthMethodDashboard.png)
-
-The solution consists of a Logic App and a Workbook for AAD.
 
 ### Deployment
 
-The feedback from some people for the first version was that the deployment was too complicated. Fortunately I found someone who had already solved the problem of deploying Logic Apps with Log Analytics Connector via ARM template.
-Kudos to Thomas Naunheim, Sami Lamppu & Markus Pitkäranta for their [Azure AD Security Config Analyzer (AADSCA)](https://github.com/Cloud-Architekt/AzureAD-Attack-Defense/blob/main/AADSecurityConfigAnalyzer.md)
+A granular dashboard can easy be deployed to a customer environment needing a Logic App and a Workbook. 
+
+The feedback from some people for the first version described in this [blogpost](https://chris-brumm.medium.com/implementing-an-advanced-authentication-methods-dashboard-bcb83ebbef95) was that the deployment was too complicated. Fortunately I found someone who had already solved the problem of deploying Logic Apps with Log Analytics Connector via ARM template. Kudos to Thomas Naunheim, Sami Lamppu & Markus Pitkäranta for their [Azure AD Security Config Analyzer (AADSCA)](https://github.com/Cloud-Architekt/AzureAD-Attack-Defense/blob/main/AADSecurityConfigAnalyzer.md)
 
 #### Step 1: Deploy Logic App
 
@@ -54,6 +71,8 @@ For the deployment you will only need to choose the Resource Group for the workb
 <img src="/media/CustomDeploymentWorkbook.png" alt="alt text" width="300">
 
 ### Usage
+
+![Auth Method Dashboard](/media/AuthMethodDashboard.png)
 
 #### Add more groups
 
