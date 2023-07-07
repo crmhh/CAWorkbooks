@@ -5,16 +5,34 @@ A granular dashboard can easy be deployed to a customer environment needing a Lo
 ![Overview Auth Method Dashboard](/media/OverviewAuthMethodDashboard.png)
 ![Auth Method Dashboard](/media/AuthMethodDashboard.png)
 
+The solution consists of a Logic App and a Workbook for AAD.
+
 ### Step 1: Deploy Logic App
 
-[![deploy2azure.png](https://aka.ms/deploytoazurebutton)](https://portal.azure.com/#create/Microsoft.Template/uri/https%3A%2F%2Fraw.githubusercontent.com%2Fcrmhh%2FCAWorkbooks%2Fmain%2FStrongAuthDashboard-LogicApp.arm.json)
+[![deploy2azure](https://aka.ms/deploytoazurebutton)](https://portal.azure.com/#create/Microsoft.Template/uri/https%3A%2F%2Fraw.githubusercontent.com%2Fcrmhh%2FCAWorkbooks%2Fmain%2Fconfig%2Fdeploy%2FStrongAuthDashboard-LogicApp.arm.json)
+
+For the deployment you will need some infos from your Log Analytics Workspace:
+* The name of your Log Analytics Workspace
+* The ID of your Log Analytics Workspace
+* The name of the Resource Group of your Log Analytics Workspace
+* The ID of the Subscription of your Log Analytics Workspace
+* A key for your Log Analytics Workspace
+
+You will find all of them in the overview page of your LAWS - except the key that is in the Agents section. 
+
+Since the dashboard is working on specific AAD groups you are asked to provide the object ID of your first group in addition. It is reasonable to use dynamic groups containing your enabled, real users. 
 
  <img src="https://github.com/crmhh/CAWorkbooks/assets/30894952/c34d2dc9-d8a7-48cc-a25c-e2ad02f51050" alt="alt text" width="350" height="350">
 
 ### Step 2: Grant Permission to the Managed Identity of the LA:
 
-https://gist.github.com/crmhh/11d2b4a7dd1c598d63f4ee3f0f7bd833#file-assignlamipems-ps1
+The Logic App will be deployed in a disabled state and you should grant permissions to the already enabled Managed Identity before you enable it. The needed permissions are:
+* User.Read.All
+* UserAuthenticationMethod.Read.All
+* Group.Read.All
+
+You can do this easy with Powershell. Here is a [sample script](/config/deploy/StrongAuthDashboardAssignPerms.ps1)
 
 ### Step 3: Deploy Workbook
 
-[![deploy2azure.png](https://github.com/crmhh/CAWorkbooks/assets/30894952/f47a0916-d2fb-403f-8435-ea0f39483718)](https://portal.azure.com/#create/Microsoft.Template/uri/https://portal.azure.com/#create/Microsoft.Template/uri/https%3A%2F%2Fraw.githubusercontent.com%2Fcrmhh%2FCAWorkbooks%2Fmain%2FStrongAuthDashboard.arm.json)
+[![deploy2azure](https://aka.ms/deploytoazurebutton)](https://portal.azure.com/#create/Microsoft.Template/uri/https%3A%2F%2Fraw.githubusercontent.com%2Fcrmhh%2FCAWorkbooks%2Fmain%2Fconfig%2Fdeploy%2FStrongAuthDashboard.arm.json)
