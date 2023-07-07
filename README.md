@@ -2,6 +2,9 @@
 ## Strong Authentication Dashboard
 A granular dashboard can easy be deployed to a customer environment needing a Logic App and a Workbook. For a detailed overview see this [blogpost](https://chris-brumm.medium.com/implementing-an-advanced-authentication-methods-dashboard-bcb83ebbef95) 
 
+![StrongAuthDashboardDemo](/media/StrongAuthDashboardDemo.gif)
+
+
 ![Overview Auth Method Dashboard](/media/OverviewAuthMethodDashboard.png)
 ![Auth Method Dashboard](/media/AuthMethodDashboard.png)
 
