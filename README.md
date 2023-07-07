@@ -72,11 +72,16 @@ For the deployment you will only need to choose the Resource Group for the workb
 <img src="/media/CustomDeploymentWorkbook.png" alt="alt text" width="300">
 
 ### Usage
-
+The main purpose of the dashboard is to support you by improving your authentication posture. Therefore, it is highly filterable and the detailed results can be refined or exported.
 ![Auth Method Dashboard](/media/AuthMethodDashboard.png)
 
-#### Add more groups
+#### Group Filter vs. All Users
+All charts and tables have an optional filtering on the selected group included. I'm prefering the view on dedicated groups, because often the groups are overlapping but you can also choose the All Users option.
 
+#### Time Range Filter
+In default the Logic App has a daily schedule (it is easy to adjust in the Logic App) so the best choice for the Time Range filter is 24 hours. For the timeline and the usage it is reasonable to choose other ranges.
+
+#### Add more groups
 On the long run you will want to add more than one group. 
 
 * At the deployment you can directly configure a comma-separated-list 
