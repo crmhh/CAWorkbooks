@@ -94,7 +94,7 @@
                                             "actions": {
                                                 "Send_Data": {
                                                     "inputs": {
-                                                        "body": "{\n \"id\": \"@{items('For_each_Member')?['id']}\",\n \"upn\": \"@{items('For_each_Member')?['userPrincipalName']}\",\n \"group\": \"@{items('For_each_Group')}\",\n\"groupname\": \"@{body('Parse_JSON_Group')?['displayName']}\",\n \"AuthMethod\": \"@{items('For_each_Auth_Method')?['@odata.type']}\"\n}",
+                                                            "body": "{\n \"id\": \"@{items('For_each_Member')?['id']}\",\n \"upn\": \"@{items('For_each_Member')?['userPrincipalName']}\",\n \"group\": \"@{items('For_each_Group')}\",\n\"groupname\": \"@{body('Parse_JSON_Group')?['displayName']}\",\n \"AuthMethod\": \"@{items('For_each_Auth_Method')?['@odata.type']}\",\n \"UserPrefAuthMethod\": \"@{body('Parse_JSON_Prefs')?['userPreferredMethodForSecondaryAuthentication']}\",\n \"SystemPrefAuthEnabled\": \"@{body('Parse_JSON_Prefs')?['isSystemPreferredAuthenticationMethodEnabled']}\",\n \"SystemPrefAuthMethod\": \"@{body('Parse_JSON_Prefs')?['systemPreferredAuthenticationMethod']}\"\n}",
                                                         "headers": {
                                                             "Log-Type": "UserGroupCollection"
                                                         },
@@ -146,6 +146,18 @@
                                             "runAfter": {},
                                             "type": "Http"
                                         },
+                                            "HTTP_-_Get_Prefs": {
+                                                "inputs": {
+                                                    "authentication": {
+                                                        "audience": "https://graph.microsoft.com",
+                                                        "type": "ManagedServiceIdentity"
+                                                    },
+                                                    "method": "GET",
+                                                    "uri": "https://graph.microsoft.com/beta/users/@{items('For_each_Member')?['userPrincipalName']}/authentication/signInPreferences"
+                                                },
+                                                "runAfter": {},
+                                                "type": "Http"
+                                            },
                                         "Parse_JSON_Methods": {
                                             "inputs": {
                                                 "content": "@body('HTTP_-_Get_Methods')",
@@ -247,6 +259,8 @@
                                                 "content": "@body('HTTP_-_Get_Prefs')",
                                                 "schema": {
                                                     "properties": {
+                                                            "content": {
+                                                                "properties": {
                                                         "@@odata.context": {
                                                             "type": "string"
                                                         },
@@ -254,13 +268,55 @@
                                                             "type": "boolean"
                                                         },
                                                         "systemPreferredAuthenticationMethod": {},
+                                                                    "userPreferredMethodForSecondaryAuthentication": {}
+                                                                },
+                                                                "type": "object"
+                                                            },
+                                                            "schema": {
+                                                                "properties": {
+                                                                    "properties": {
+                                                                        "properties": {
+                                                                            "@@odata.context": {
+                                                                                "properties": {
+                                                                                    "type": {
+                                                                                        "type": "string"
+                                                                                    }
+                                                                                },
+                                                                                "type": "object"
+                                                                            },
+                                                                            "isSystemPreferredAuthenticationMethodEnabled": {
+                                                                                "properties": {
+                                                                                    "type": {
+                                                                                        "type": "string"
+                                                                                    }
+                                                                                },
+                                                                                "type": "object"
+                                                                            },
+                                                                            "systemPreferredAuthenticationMethod": {
+                                                                                "properties": {},
+                                                                                "type": "object"
+                                                                            },
                                                         "userPreferredMethodForSecondaryAuthentication": {
+                                                                                "properties": {
+                                                                                    "type": {
+                                                                                        "type": "string"
+                                                                                    }
+                                                                                },
+                                                                                "type": "object"
+                                                                            }
+                                                                        },
+                                                                        "type": "object"
+                                                                    },
+                                                                    "type": {
                                                             "type": "string"
                                                         }
                                                     },
                                                     "type": "object"
                                                 }
                                             },
+                                                        "type": "object"
+                                                    }
+                                                },
                                             "runAfter": {
                                                 "HTTP_-_Get_Prefs": [
                                                     "Succeeded"
@@ -315,194 +371,68 @@
                                         "content": "@body('HTTP_-_Get_Group_Member')",
                                         "schema": {
                                             "properties": {
-                                                "content": {
-                                                    "properties": {
-                                                        "value": {
-                                                            "items": {
-                                                                "properties": {
-                                                                    "@@odata.type": {
-                                                                        "type": "string"
-                                                                    },
-                                                                    "businessPhones": {
-                                                                        "items": {
-                                                                            "type": "string"
-                                                                        },
-                                                                        "type": "array"
-                                                                    },
-                                                                    "displayName": {
-                                                                        "type": "string"
-                                                                    },
-                                                                    "givenName": {
-                                                                        "type": "string"
-                                                                    },
-                                                                    "id": {
-                                                                        "type": "string"
-                                                                    },
-                                                                    "jobTitle": {
-                                                                        "type": "string"
-                                                                    },
-                                                                    "mail": {
-                                                                        "type": "string"
-                                                                    },
-                                                                    "mobilePhone": {
-                                                                        "type": "string"
-                                                                    },
-                                                                    "officeLocation": {
-                                                                        "type": "string"
-                                                                    },
-                                                                    "preferredLanguage": {},
-                                                                    "surname": {
-                                                                        "type": "string"
-                                                                    },
-                                                                    "userPrincipalName": {
-                                                                        "type": "string"
-                                                                    }
-                                                                },
-                                                                "required": [
-                                                                    "@@odata.type",
-                                                                    "id",
-                                                                    "businessPhones",
-                                                                    "displayName",
-                                                                    "givenName",
-                                                                    "jobTitle",
-                                                                    "mail",
-                                                                    "mobilePhone",
-                                                                    "officeLocation",
-                                                                    "preferredLanguage",
-                                                                    "surname",
-                                                                    "userPrincipalName"
-                                                                ],
-                                                                "type": "object"
-                                                            },
-                                                            "type": "array"
-                                                        }
-                                                    },
-                                                    "type": "object"
-                                                },
-                                                "schema": {
-                                                    "properties": {
+                                                    "body": {
                                                         "properties": {
-                                                            "properties": {
-                                                                "@@odata.context": {
-                                                                    "properties": {
-                                                                        "type": {
-                                                                            "type": "string"
-                                                                        }
-                                                                    },
-                                                                    "type": "object"
-                                                                },
-                                                                "value": {
-                                                                    "properties": {
-                                                                        "items": {
-                                                                            "properties": {
-                                                                                "properties": {
-                                                                                    "properties": {
-                                                                                        "@@odata.type": {
-                                                                                            "properties": {
-                                                                                                "type": {
-                                                                                                    "type": "string"
-                                                                                                }
-                                                                                            },
-                                                                                            "type": "object"
-                                                                                        },
-                                                                                        "businessPhones": {
-                                                                                            "properties": {
-                                                                                                "type": {
-                                                                                                    "type": "string"
-                                                                                                }
-                                                                                            },
-                                                                                            "type": "object"
-                                                                                        },
-                                                                                        "displayName": {
-                                                                                            "properties": {
-                                                                                                "type": {
-                                                                                                    "type": "string"
-                                                                                                }
-                                                                                            },
-                                                                                            "type": "object"
-                                                                                        },
-                                                                                        "givenName": {
-                                                                                            "properties": {},
-                                                                                            "type": "object"
-                                                                                        },
-                                                                                        "id": {
-                                                                                            "properties": {
-                                                                                                "type": {
-                                                                                                    "type": "string"
-                                                                                                }
-                                                                                            },
-                                                                                            "type": "object"
-                                                                                        },
-                                                                                        "jobTitle": {
-                                                                                            "properties": {},
-                                                                                            "type": "object"
-                                                                                        },
-                                                                                        "mail": {
-                                                                                            "properties": {
-                                                                                                "type": {
-                                                                                                    "type": "string"
-                                                                                                }
-                                                                                            },
-                                                                                            "type": "object"
-                                                                                        },
-                                                                                        "mobilePhone": {
-                                                                                            "properties": {},
-                                                                                            "type": "object"
-                                                                                        },
-                                                                                        "officeLocation": {
-                                                                                            "properties": {},
-                                                                                            "type": "object"
-                                                                                        },
-                                                                                        "preferredLanguage": {
-                                                                                            "properties": {},
-                                                                                            "type": "object"
-                                                                                        },
-                                                                                        "surname": {
-                                                                                            "properties": {},
-                                                                                            "type": "object"
-                                                                                        },
-                                                                                        "userPrincipalName": {
-                                                                                            "properties": {
-                                                                                                "type": {
-                                                                                                    "type": "string"
-                                                                                                }
-                                                                                            },
-                                                                                            "type": "object"
-                                                                                        }
-                                                                                    },
-                                                                                    "type": "object"
-                                                                                },
-                                                                                "required": {
-                                                                                    "items": {
-                                                                                        "type": "string"
-                                                                                    },
-                                                                                    "type": "array"
-                                                                                },
-                                                                                "type": {
-                                                                                    "type": "string"
-                                                                                }
-                                                                            },
-                                                                            "type": "object"
-                                                                        },
-                                                                        "type": {
-                                                                            "type": "string"
-                                                                        }
-                                                                    },
-                                                                    "type": "object"
-                                                                }
+                                                "value": {
+                                                    "items": {
+                                                        "properties": {
+                                                            "@@odata.type": {
+                                                                "type": "string"
                                                             },
-                                                            "type": "object"
+                                                            "businessPhones": {
+                                                                            "items": {
+                                                                                "type": "string"
+                                                                            },
+                                                                "type": "array"
+                                                            },
+                                                            "displayName": {
+                                                                "type": "string"
+                                                            },
+                                                                        "givenName": {
+                                                                            "type": "string"
+                                                                        },
+                                                            "id": {
+                                                                "type": "string"
+                                                            },
+                                                            "jobTitle": {},
+                                                            "mail": {
+                                                                "type": "string"
+                                                            },
+                                                            "mobilePhone": {},
+                                                            "officeLocation": {},
+                                                            "preferredLanguage": {},
+                                                                        "surname": {
+                                                                            "type": "string"
+                                                                        },
+                                                            "userPrincipalName": {
+                                                                "type": "string"
+                                                            }
                                                         },
-                                                        "type": {
-                                                            "type": "string"
-                                                        }
+                                                        "required": [
+                                                            "@@odata.type",
+                                                            "id",
+                                                            "businessPhones",
+                                                            "displayName",
+                                                            "givenName",
+                                                            "jobTitle",
+                                                            "mail",
+                                                            "mobilePhone",
+                                                            "officeLocation",
+                                                            "preferredLanguage",
+                                                            "surname",
+                                                            "userPrincipalName"
+                                                        ],
+                                                        "type": "object"
                                                     },
-                                                    "type": "object"
+                                                    "type": "array"
                                                 }
                                             },
                                             "type": "object"
                                         }
                                     },
+                                                "type": "object"
+                                            }
+                                        },
                                     "runAfter": {
                                         "HTTP_-_Get_Group_Member": [
                                             "Succeeded"
@@ -723,6 +653,7 @@
                                 "connectionId": "[variables('LAWSConnectionId')]",
                                 "connectionName": "[parameters('LAWSConnectionName')]",
                                 "id": "[variables('LAWSConnectionApiId')]"
+                                    }
                             }
                         }
                     }
