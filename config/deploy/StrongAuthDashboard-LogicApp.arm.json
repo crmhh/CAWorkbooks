@@ -83,57 +83,57 @@
             },
             "properties": {
                 "state": "Disabled",
-                    "definition": {
-                        "$schema": "https://schema.management.azure.com/providers/Microsoft.Logic/schemas/2016-06-01/workflowdefinition.json#",
-                        "actions": {
-                            "For_each_Group": {
-                                "actions": {
-                                    "For_each_Member": {
-                                        "actions": {
-                                            "For_each_Auth_Method": {
-                                                "actions": {
-                                                    "Send_Data": {
-                                                        "inputs": {
+                "definition": {
+                    "$schema": "https://schema.management.azure.com/providers/Microsoft.Logic/schemas/2016-06-01/workflowdefinition.json#",
+                    "actions": {
+                        "For_each_Group": {
+                            "actions": {
+                                "For_each_Member": {
+                                    "actions": {
+                                        "For_each_Auth_Method": {
+                                            "actions": {
+                                                "Send_Data": {
+                                                    "inputs": {
                                                             "body": "{\n \"id\": \"@{items('For_each_Member')?['id']}\",\n \"upn\": \"@{items('For_each_Member')?['userPrincipalName']}\",\n \"group\": \"@{items('For_each_Group')}\",\n\"groupname\": \"@{body('Parse_JSON_Group')?['displayName']}\",\n \"AuthMethod\": \"@{items('For_each_Auth_Method')?['@odata.type']}\",\n \"UserPrefAuthMethod\": \"@{body('Parse_JSON_Prefs')?['userPreferredMethodForSecondaryAuthentication']}\",\n \"SystemPrefAuthEnabled\": \"@{body('Parse_JSON_Prefs')?['isSystemPreferredAuthenticationMethodEnabled']}\",\n \"SystemPrefAuthMethod\": \"@{body('Parse_JSON_Prefs')?['systemPreferredAuthenticationMethod']}\"\n}",
-                                                            "headers": {
-                                                                "Log-Type": "UserGroupCollection"
-                                                            },
-                                                            "host": {
-                                                                "connection": {
-                                                                    "name": "@parameters('$connections')['azureloganalyticsdatacollector']['connectionId']"
-                                                                }
-                                                            },
-                                                            "method": "post",
-                                                            "path": "/api/logs"
+                                                        "headers": {
+                                                            "Log-Type": "UserGroupCollection"
                                                         },
-                                                        "runAfter": {},
-                                                        "type": "ApiConnection"
-                                                    }
-                                                },
-                                                "foreach": "@body('Parse_JSON_Methods')?['value']",
-                                                "runAfter": {
-                                                    "Parse_JSON_Methods": [
-                                                        "Succeeded"
-                                                    ]
-                                                },
-                                                "type": "Foreach"
-                                            },
-                                            "HTTP_-_Get_Methods": {
-                                                "inputs": {
-                                                    "authentication": {
-                                                        "audience": "https://graph.microsoft.com",
-                                                        "type": "ManagedServiceIdentity"
+                                                        "host": {
+                                                            "connection": {
+                                                                "name": "@parameters('$connections')['azureloganalyticsdatacollector']['connectionId']"
+                                                            }
+                                                        },
+                                                        "method": "post",
+                                                        "path": "/api/logs"
                                                     },
-                                                    "method": "GET",
-                                                    "uri": "https://graph.microsoft.com/beta/users/@{items('For_each_Member')?['userPrincipalName']}/authentication/methods"
-                                                },
-                                                "runAfter": {
-                                                    "Parse_JSON_Prefs": [
-                                                        "Succeeded"
-                                                    ]
-                                                },
-                                                "type": "Http"
+                                                    "runAfter": {},
+                                                    "type": "ApiConnection"
+                                                }
                                             },
+                                            "foreach": "@body('Parse_JSON_Methods')?['value']",
+                                            "runAfter": {
+                                                "Parse_JSON_Methods": [
+                                                    "Succeeded"
+                                                ]
+                                            },
+                                            "type": "Foreach"
+                                        },
+                                        "HTTP_-_Get_Methods": {
+                                            "inputs": {
+                                                "authentication": {
+                                                    "audience": "https://graph.microsoft.com",
+                                                    "type": "ManagedServiceIdentity"
+                                                },
+                                                "method": "GET",
+                                                "uri": "https://graph.microsoft.com/beta/users/@{items('For_each_Member')?['userPrincipalName']}/authentication/methods"
+                                            },
+                                            "runAfter": {
+                                                "Parse_JSON_Prefs": [
+                                                    "Succeeded"
+                                                ]
+                                            },
+                                            "type": "Http"
+                                        },
                                             "HTTP_-_Get_Prefs": {
                                                 "inputs": {
                                                     "authentication": {
@@ -146,116 +146,116 @@
                                                 "runAfter": {},
                                                 "type": "Http"
                                             },
-                                            "Parse_JSON_Methods": {
-                                                "inputs": {
-                                                    "content": "@body('HTTP_-_Get_Methods')",
-                                                    "schema": {
-                                                        "properties": {
-                                                            "body": {
-                                                                "properties": {
-                                                                    "@@odata.context": {
-                                                                        "type": "string"
-                                                                    },
-                                                                    "value": {
-                                                                        "items": {
-                                                                            "properties": {
-                                                                                "@@odata.type": {
-                                                                                    "type": "string"
-                                                                                },
-                                                                                "clientAppName": {
-                                                                                    "type": "string"
-                                                                                },
-                                                                                "createdDateTime": {},
-                                                                                "creationDateTime": {},
-                                                                                "deviceTag": {
-                                                                                    "type": "string"
-                                                                                },
-                                                                                "displayName": {
-                                                                                    "type": "string"
-                                                                                },
-                                                                                "id": {
-                                                                                    "type": "string"
-                                                                                },
-                                                                                "password": {},
-                                                                                "phoneAppVersion": {
-                                                                                    "type": "string"
-                                                                                }
+                                        "Parse_JSON_Methods": {
+                                            "inputs": {
+                                                "content": "@body('HTTP_-_Get_Methods')",
+                                                "schema": {
+                                                    "properties": {
+                                                        "body": {
+                                                            "properties": {
+                                                                "@@odata.context": {
+                                                                    "type": "string"
+                                                                },
+                                                                "value": {
+                                                                    "items": {
+                                                                        "properties": {
+                                                                            "@@odata.type": {
+                                                                                "type": "string"
                                                                             },
-                                                                            "required": [
-                                                                                "@@odata.type",
-                                                                                "id",
-                                                                                "createdDateTime"
-                                                                            ],
-                                                                            "type": "object"
+                                                                            "clientAppName": {
+                                                                                "type": "string"
+                                                                            },
+                                                                            "createdDateTime": {},
+                                                                            "creationDateTime": {},
+                                                                            "deviceTag": {
+                                                                                "type": "string"
+                                                                            },
+                                                                            "displayName": {
+                                                                                "type": "string"
+                                                                            },
+                                                                            "id": {
+                                                                                "type": "string"
+                                                                            },
+                                                                            "password": {},
+                                                                            "phoneAppVersion": {
+                                                                                "type": "string"
+                                                                            }
                                                                         },
-                                                                        "type": "array"
-                                                                    }
-                                                                },
-                                                                "type": "object"
+                                                                        "required": [
+                                                                            "@@odata.type",
+                                                                            "id",
+                                                                            "createdDateTime"
+                                                                        ],
+                                                                        "type": "object"
+                                                                    },
+                                                                    "type": "array"
+                                                                }
                                                             },
-                                                            "headers": {
-                                                                "properties": {
-                                                                    "Content-Length": {
-                                                                        "type": "string"
-                                                                    },
-                                                                    "Content-Type": {
-                                                                        "type": "string"
-                                                                    },
-                                                                    "Date": {
-                                                                        "type": "string"
-                                                                    },
-                                                                    "OData-Version": {
-                                                                        "type": "string"
-                                                                    },
-                                                                    "Strict-Transport-Security": {
-                                                                        "type": "string"
-                                                                    },
-                                                                    "Transfer-Encoding": {
-                                                                        "type": "string"
-                                                                    },
-                                                                    "Vary": {
-                                                                        "type": "string"
-                                                                    },
-                                                                    "client-request-id": {
-                                                                        "type": "string"
-                                                                    },
-                                                                    "request-id": {
-                                                                        "type": "string"
-                                                                    },
-                                                                    "x-ms-ags-diagnostic": {
-                                                                        "type": "string"
-                                                                    }
-                                                                },
-                                                                "type": "object"
-                                                            },
-                                                            "statusCode": {
-                                                                "type": "integer"
-                                                            }
+                                                            "type": "object"
                                                         },
-                                                        "type": "object"
-                                                    }
-                                                },
-                                                "runAfter": {
-                                                    "HTTP_-_Get_Methods": [
-                                                        "Succeeded"
-                                                    ]
-                                                },
-                                                "type": "ParseJson"
+                                                        "headers": {
+                                                            "properties": {
+                                                                "Content-Length": {
+                                                                    "type": "string"
+                                                                },
+                                                                "Content-Type": {
+                                                                    "type": "string"
+                                                                },
+                                                                "Date": {
+                                                                    "type": "string"
+                                                                },
+                                                                "OData-Version": {
+                                                                    "type": "string"
+                                                                },
+                                                                "Strict-Transport-Security": {
+                                                                    "type": "string"
+                                                                },
+                                                                "Transfer-Encoding": {
+                                                                    "type": "string"
+                                                                },
+                                                                "Vary": {
+                                                                    "type": "string"
+                                                                },
+                                                                "client-request-id": {
+                                                                    "type": "string"
+                                                                },
+                                                                "request-id": {
+                                                                    "type": "string"
+                                                                },
+                                                                "x-ms-ags-diagnostic": {
+                                                                    "type": "string"
+                                                                }
+                                                            },
+                                                            "type": "object"
+                                                        },
+                                                        "statusCode": {
+                                                            "type": "integer"
+                                                        }
+                                                    },
+                                                    "type": "object"
+                                                }
                                             },
-                                            "Parse_JSON_Prefs": {
-                                                "inputs": {
-                                                    "content": "@body('HTTP_-_Get_Prefs')",
-                                                    "schema": {
-                                                        "properties": {
+                                            "runAfter": {
+                                                "HTTP_-_Get_Methods": [
+                                                    "Succeeded"
+                                                ]
+                                            },
+                                            "type": "ParseJson"
+                                        },
+                                        "Parse_JSON_Prefs": {
+                                            "inputs": {
+                                                "content": "@body('HTTP_-_Get_Prefs')",
+                                                "schema": {
+                                                    "properties": {
                                                             "content": {
                                                                 "properties": {
-                                                                    "@@odata.context": {
-                                                                        "type": "string"
-                                                                    },
-                                                                    "isSystemPreferredAuthenticationMethodEnabled": {
-                                                                        "type": "boolean"
-                                                                    },
-                                                                    "systemPreferredAuthenticationMethod": {},
+                                                        "@@odata.context": {
+                                                            "type": "string"
+                                                        },
+                                                        "isSystemPreferredAuthenticationMethodEnabled": {
+                                                            "type": "boolean"
+                                                        },
+                                                        "systemPreferredAuthenticationMethod": {},
                                                                     "userPreferredMethodForSecondaryAuthentication": {}
                                                                 },
                                                                 "type": "object"
@@ -284,7 +284,7 @@
                                                                                 "properties": {},
                                                                                 "type": "object"
                                                                             },
-                                                                            "userPreferredMethodForSecondaryAuthentication": {
+                                                        "userPreferredMethodForSecondaryAuthentication": {
                                                                                 "properties": {
                                                                                     "type": {
                                                                                         "type": "string"
@@ -296,356 +296,352 @@
                                                                         "type": "object"
                                                                     },
                                                                     "type": {
-                                                                        "type": "string"
-                                                                    }
-                                                                },
-                                                                "type": "object"
-                                                            }
-                                                        },
+                                                            "type": "string"
+                                                        }
+                                                    },
+                                                    "type": "object"
+                                                }
+                                            },
                                                         "type": "object"
                                                     }
                                                 },
-                                                "runAfter": {
-                                                    "HTTP_-_Get_Prefs": [
-                                                        "Succeeded"
-                                                    ]
-                                                },
-                                                "type": "ParseJson"
-                                            }
-                                        },
-                                        "foreach": "@body('Parse_JSON_-_Member')?['value']",
-                                        "runAfter": {
-                                            "Parse_JSON_-_Member": [
-                                                "Succeeded"
-                                            ]
-                                        },
-                                        "type": "Foreach"
-                                    },
-                                    "HTTP_-_Get_Group": {
-                                        "inputs": {
-                                            "authentication": {
-                                                "audience": "https://graph.microsoft.com",
-                                                "type": "ManagedServiceIdentity"
+                                            "runAfter": {
+                                                "HTTP_-_Get_Prefs": [
+                                                    "Succeeded"
+                                                ]
                                             },
-                                            "method": "GET",
-                                            "uri": "https://graph.microsoft.com/v1.0/groups/@{items('For_each_Group')}/"
-                                        },
-                                        "runAfter": {},
-                                        "type": "Http"
+                                            "type": "ParseJson"
+                                        }
+                                    },                                                               
+                                    "foreach": "@body('Parse_JSON_-_Member')?['value']",
+                                    "runAfter": {
+                                        "Parse_JSON_-_Member": [
+                                            "Succeeded"
+                                        ]
                                     },
-                                    "HTTP_-_Get_Group_Member": {
-                                        "inputs": {
-                                            "authentication": {
-                                                "audience": "https://graph.microsoft.com",
-                                                "type": "ManagedServiceIdentity"
-                                            },
-                                            "method": "GET",
-                                            "uri": "https://graph.microsoft.com/v1.0/groups/@{items('For_each_Group')}/members"
+                                    "type": "Foreach"
+                                },
+                                "HTTP_-_Get_Group": {
+                                    "inputs": {
+                                        "authentication": {
+                                            "audience": "https://graph.microsoft.com",
+                                            "type": "ManagedServiceIdentity"
                                         },
-                                        "runAfter": {
-                                            "Parse_JSON_Group": [
-                                                "Succeeded"
-                                            ]
-                                        },
-                                        "runtimeConfiguration": {
-                                            "paginationPolicy": {
-                                                "minimumItemCount": 10000
-                                            }
-                                        },
-                                        "type": "Http"
+                                        "method": "GET",
+                                        "uri": "https://graph.microsoft.com/v1.0/groups/@{items('For_each_Group')}/"
                                     },
-                                    "Parse_JSON_-_Member": {
-                                        "inputs": {
-                                            "content": "@body('HTTP_-_Get_Group_Member')",
-                                            "schema": {
-                                                "properties": {
+                                    "runAfter": {},
+                                    "type": "Http"
+                                },
+                                "HTTP_-_Get_Group_Member": {
+                                    "inputs": {
+                                        "authentication": {
+                                            "audience": "https://graph.microsoft.com",
+                                            "type": "ManagedServiceIdentity"
+                                        },
+                                        "method": "GET",
+                                        "uri": "https://graph.microsoft.com/v1.0/groups/@{items('For_each_Group')}/members"
+                                    },
+                                    "runAfter": {
+                                        "Parse_JSON_Group": [
+                                            "Succeeded"
+                                        ]
+                                    },
+                                    "runtimeConfiguration": {
+                                        "paginationPolicy": {
+                                            "minimumItemCount": 10000
+                                        }
+                                    },         
+                                    "type": "Http"
+                                },
+                                "Parse_JSON_-_Member": {
+                                    "inputs": {
+                                        "content": "@body('HTTP_-_Get_Group_Member')",
+                                        "schema": {
+                                            "properties": {
                                                     "body": {
                                                         "properties": {
-                                                            "value": {
-                                                                "items": {
-                                                                    "properties": {
-                                                                        "@@odata.type": {
-                                                                            "type": "string"
-                                                                        },
-                                                                        "businessPhones": {
+                                                "value": {
+                                                    "items": {
+                                                        "properties": {
+                                                            "@@odata.type": {
+                                                                "type": "string"
+                                                            },
+                                                            "businessPhones": {
                                                                             "items": {
                                                                                 "type": "string"
                                                                             },
-                                                                            "type": "array"
-                                                                        },
-                                                                        "displayName": {
-                                                                            "type": "string"
-                                                                        },
-                                                                        "givenName": {
-                                                                            "type": "string"
-                                                                        },
-                                                                        "id": {
-                                                                            "type": "string"
-                                                                        },
-                                                                        "jobTitle": {},
-                                                                        "mail": {
-                                                                            "type": "string"
-                                                                        },
-                                                                        "mobilePhone": {},
-                                                                        "officeLocation": {},
-                                                                        "preferredLanguage": {},
-                                                                        "surname": {
-                                                                            "type": "string"
-                                                                        },
-                                                                        "userPrincipalName": {
-                                                                            "type": "string"
-                                                                        }
-                                                                    },
-                                                                    "required": [
-                                                                        "@@odata.type",
-                                                                        "id",
-                                                                        "businessPhones",
-                                                                        "displayName",
-                                                                        "givenName",
-                                                                        "jobTitle",
-                                                                        "mail",
-                                                                        "mobilePhone",
-                                                                        "officeLocation",
-                                                                        "preferredLanguage",
-                                                                        "surname",
-                                                                        "userPrincipalName"
-                                                                    ],
-                                                                    "type": "object"
-                                                                },
-                                                                "type": "array"
-                                                            }
-                                                        },
-                                                        "type": "object"
-                                                    }
-                                                },
-                                                "type": "object"
-                                            }
-                                        },
-                                        "runAfter": {
-                                            "HTTP_-_Get_Group_Member": [
-                                                "Succeeded"
-                                            ]
-                                        },
-                                        "type": "ParseJson"
-                                    },
-                                    "Parse_JSON_Group": {
-                                        "inputs": {
-                                            "content": "@body('HTTP_-_Get_Group')",
-                                            "schema": {
-                                                "properties": {
-                                                    "body": {
-                                                        "properties": {
-                                                            "@@odata.context": {
-                                                                "type": "string"
-                                                            },
-                                                            "classification": {},
-                                                            "createdDateTime": {
-                                                                "type": "string"
-                                                            },
-                                                            "creationOptions": {
                                                                 "type": "array"
                                                             },
-                                                            "deletedDateTime": {},
-                                                            "description": {},
                                                             "displayName": {
                                                                 "type": "string"
                                                             },
-                                                            "expirationDateTime": {},
-                                                            "groupTypes": {
-                                                                "type": "array"
-                                                            },
+                                                                        "givenName": {
+                                                                            "type": "string"
+                                                                        },
                                                             "id": {
                                                                 "type": "string"
                                                             },
-                                                            "isAssignableToRole": {},
-                                                            "mail": {},
-                                                            "mailEnabled": {
-                                                                "type": "boolean"
-                                                            },
-                                                            "mailNickname": {
+                                                            "jobTitle": {},
+                                                            "mail": {
                                                                 "type": "string"
                                                             },
-                                                            "membershipRule": {},
-                                                            "membershipRuleProcessingState": {},
-                                                            "onPremisesDomainName": {},
-                                                            "onPremisesLastSyncDateTime": {},
-                                                            "onPremisesNetBiosName": {},
-                                                            "onPremisesProvisioningErrors": {
-                                                                "type": "array"
-                                                            },
-                                                            "onPremisesSamAccountName": {},
-                                                            "onPremisesSecurityIdentifier": {},
-                                                            "onPremisesSyncEnabled": {},
-                                                            "preferredDataLocation": {},
+                                                            "mobilePhone": {},
+                                                            "officeLocation": {},
                                                             "preferredLanguage": {},
-                                                            "proxyAddresses": {
-                                                                "type": "array"
-                                                            },
-                                                            "renewedDateTime": {
-                                                                "type": "string"
-                                                            },
-                                                            "resourceBehaviorOptions": {
-                                                                "type": "array"
-                                                            },
-                                                            "resourceProvisioningOptions": {
-                                                                "type": "array"
-                                                            },
-                                                            "securityEnabled": {
-                                                                "type": "boolean"
-                                                            },
-                                                            "securityIdentifier": {
-                                                                "type": "string"
-                                                            },
-                                                            "theme": {},
-                                                            "visibility": {}
-                                                        },
-                                                        "type": "object"
-                                                    },
-                                                    "headers": {
-                                                        "properties": {
-                                                            "Cache-Control": {
-                                                                "type": "string"
-                                                            },
-                                                            "Content-Length": {
-                                                                "type": "string"
-                                                            },
-                                                            "Content-Type": {
-                                                                "type": "string"
-                                                            },
-                                                            "Date": {
-                                                                "type": "string"
-                                                            },
-                                                            "OData-Version": {
-                                                                "type": "string"
-                                                            },
-                                                            "Strict-Transport-Security": {
-                                                                "type": "string"
-                                                            },
-                                                            "Transfer-Encoding": {
-                                                                "type": "string"
-                                                            },
-                                                            "Vary": {
-                                                                "type": "string"
-                                                            },
-                                                            "client-request-id": {
-                                                                "type": "string"
-                                                            },
-                                                            "request-id": {
-                                                                "type": "string"
-                                                            },
-                                                            "x-ms-ags-diagnostic": {
-                                                                "type": "string"
-                                                            },
-                                                            "x-ms-resource-unit": {
+                                                                        "surname": {
+                                                                            "type": "string"
+                                                                        },
+                                                            "userPrincipalName": {
                                                                 "type": "string"
                                                             }
                                                         },
+                                                        "required": [
+                                                            "@@odata.type",
+                                                            "id",
+                                                            "businessPhones",
+                                                            "displayName",
+                                                            "givenName",
+                                                            "jobTitle",
+                                                            "mail",
+                                                            "mobilePhone",
+                                                            "officeLocation",
+                                                            "preferredLanguage",
+                                                            "surname",
+                                                            "userPrincipalName"
+                                                        ],
                                                         "type": "object"
                                                     },
-                                                    "statusCode": {
-                                                        "type": "integer"
-                                                    }
-                                                },
+                                                    "type": "array"
+                                                }
+                                            },
+                                            "type": "object"
+                                        }
+                                    },
                                                 "type": "object"
                                             }
                                         },
-                                        "runAfter": {
-                                            "HTTP_-_Get_Group": [
-                                                "Succeeded"
-                                            ]
-                                        },
-                                        "type": "ParseJson"
-                                    }
+                                    "runAfter": {
+                                        "HTTP_-_Get_Group_Member": [
+                                            "Succeeded"
+                                        ]
+                                    },
+                                    "type": "ParseJson"
                                 },
-                                "foreach": "@body('Parse_JSON')",
-                                "runAfter": {
-                                    "Parse_JSON": [
-                                        "Succeeded"
-                                    ]
-                                },
-                                "type": "Foreach"
-                            },
-                            "Initialize_variable_-_AuthMethods": {
-                                "inputs": {
-                                    "variables": [
-                                        {
-                                            "name": "AuthMethods",
-                                            "type": "array"
+                                "Parse_JSON_Group": {
+                                    "inputs": {
+                                        "content": "@body('HTTP_-_Get_Group')",
+                                        "schema": {
+                                            "properties": {
+                                                "body": {
+                                                    "properties": {
+                                                        "@@odata.context": {
+                                                            "type": "string"
+                                                        },
+                                                        "classification": {},
+                                                        "createdDateTime": {
+                                                            "type": "string"
+                                                        },
+                                                        "creationOptions": {
+                                                            "type": "array"
+                                                        },
+                                                        "deletedDateTime": {},
+                                                        "description": {},
+                                                        "displayName": {
+                                                            "type": "string"
+                                                        },
+                                                        "expirationDateTime": {},
+                                                        "groupTypes": {
+                                                            "type": "array"
+                                                        },
+                                                        "id": {
+                                                            "type": "string"
+                                                        },
+                                                        "isAssignableToRole": {},
+                                                        "mail": {},
+                                                        "mailEnabled": {
+                                                            "type": "boolean"
+                                                        },
+                                                        "mailNickname": {
+                                                            "type": "string"
+                                                        },
+                                                        "membershipRule": {},
+                                                        "membershipRuleProcessingState": {},
+                                                        "onPremisesDomainName": {},
+                                                        "onPremisesLastSyncDateTime": {},
+                                                        "onPremisesNetBiosName": {},
+                                                        "onPremisesProvisioningErrors": {
+                                                            "type": "array"
+                                                        },
+                                                        "onPremisesSamAccountName": {},
+                                                        "onPremisesSecurityIdentifier": {},
+                                                        "onPremisesSyncEnabled": {},
+                                                        "preferredDataLocation": {},
+                                                        "preferredLanguage": {},
+                                                        "proxyAddresses": {
+                                                            "type": "array"
+                                                        },
+                                                        "renewedDateTime": {
+                                                            "type": "string"
+                                                        },
+                                                        "resourceBehaviorOptions": {
+                                                            "type": "array"
+                                                        },
+                                                        "resourceProvisioningOptions": {
+                                                            "type": "array"
+                                                        },
+                                                        "securityEnabled": {
+                                                            "type": "boolean"
+                                                        },
+                                                        "securityIdentifier": {
+                                                            "type": "string"
+                                                        },
+                                                        "theme": {},
+                                                        "visibility": {}
+                                                    },
+                                                    "type": "object"
+                                                },
+                                                "headers": {
+                                                    "properties": {
+                                                        "Cache-Control": {
+                                                            "type": "string"
+                                                        },
+                                                        "Content-Length": {
+                                                            "type": "string"
+                                                        },
+                                                        "Content-Type": {
+                                                            "type": "string"
+                                                        },
+                                                        "Date": {
+                                                            "type": "string"
+                                                        },
+                                                        "OData-Version": {
+                                                            "type": "string"
+                                                        },
+                                                        "Strict-Transport-Security": {
+                                                            "type": "string"
+                                                        },
+                                                        "Transfer-Encoding": {
+                                                            "type": "string"
+                                                        },
+                                                        "Vary": {
+                                                            "type": "string"
+                                                        },
+                                                        "client-request-id": {
+                                                            "type": "string"
+                                                        },
+                                                        "request-id": {
+                                                            "type": "string"
+                                                        },
+                                                        "x-ms-ags-diagnostic": {
+                                                            "type": "string"
+                                                        },
+                                                        "x-ms-resource-unit": {
+                                                            "type": "string"
+                                                        }
+                                                    },
+                                                    "type": "object"
+                                                },
+                                                "statusCode": {
+                                                    "type": "integer"
+                                                }
+                                            },
+                                            "type": "object"
                                         }
-                                    ]
-                                },
-                                "runAfter": {
-                                    "Initialize_variable_-_GroupIDs": [
-                                        "Succeeded"
-                                    ]
-                                },
-                                "type": "InitializeVariable"
+                                    },
+                                    "runAfter": {
+                                        "HTTP_-_Get_Group": [
+                                            "Succeeded"
+                                        ]
+                                    },
+                                    "type": "ParseJson"
+                                }
                             },
-                            "Initialize_variable_-_GroupIDs": {
-                                "inputs": {
-                                    "variables": [
-                                        {
-                                            "name": "GroupIDs",
-                                            "type": "array",
-                                            "value": [
-                                                "d05f9883-7aa3-4826-a96a-886a1a24269d",
-                                                "74eff36b-a672-4e2d-92aa-6522b616b0c8",
-                                                "7c2b6f03-2a03-48a9-8ff3-b806fcadccdd"
-                                            ]
-                                        }
-                                    ]
-                                },
-                                "runAfter": {},
-                                "type": "InitializeVariable"
+                            "foreach": "@body('Parse_JSON')",
+                            "runAfter": {
+                                "Parse_JSON": [
+                                    "Succeeded"
+                                ]
                             },
-                            "Parse_JSON": {
-                                "inputs": {
-                                    "content": "@variables('GroupIDs')",
-                                    "schema": {
-                                        "items": {
-                                            "type": "string"
-                                        },
+                            "type": "Foreach"
+                        },
+                        "Initialize_variable_-_AuthMethods": {
+                            "inputs": {
+                                "variables": [
+                                    {
+                                        "name": "AuthMethods",
                                         "type": "array"
                                     }
-                                },
-                                "runAfter": {
-                                    "Initialize_variable_-_AuthMethods": [
-                                        "Succeeded"
-                                    ]
-                                },
-                                "type": "ParseJson"
-                            }
+                                ]
+                            },
+                            "runAfter": {
+                                "Initialize_variable_-_GroupIDs": [
+                                    "Succeeded"
+                                ]
+                            },
+                            "type": "InitializeVariable"
                         },
-                        "contentVersion": "1.0.0.0",
-                        "outputs": {},
-                        "parameters": {
-                            "$connections": {
-                                "defaultValue": {},
-                                "type": "Object"
-                            }
+                        "Initialize_variable_-_GroupIDs": {
+                            "inputs": {
+                                "variables": [
+                                    {
+                                        "name": "GroupIDs",
+                                        "type": "array",
+                                        "value": "[parameters('GroupIdsInScope')]"
+                                    }
+                                ]
+                            },
+                            "runAfter": {},
+                            "type": "InitializeVariable"
                         },
-                        "triggers": {
-                            "Recurrence": {
-                                "evaluatedRecurrence": {
-                                    "frequency": "Day",
-                                    "interval": 1
-                                },
-                                "recurrence": {
-                                    "frequency": "Day",
-                                    "interval": 1
-                                },
-                                "type": "Recurrence"
-                            }
+                        "Parse_JSON": {
+                            "inputs": {
+                                "content": "@variables('GroupIDs')",
+                                "schema": {
+                                    "items": {
+                                        "type": "string"
+                                    },
+                                    "type": "array"
+                                }
+                            },
+                            "runAfter": {
+                                "Initialize_variable_-_AuthMethods": [
+                                    "Succeeded"
+                                ]
+                            },
+                            "type": "ParseJson"
                         }
                     },
+                    "contentVersion": "1.0.0.0",
+                    "outputs": {},
                     "parameters": {
                         "$connections": {
-                            "value": {
-                                "azureloganalyticsdatacollector": {
-                                    "connectionId": "[variables('LAWSConnectionId')]",
-                                    "connectionName": "[parameters('LAWSConnectionName')]",
-                                    "id": "[variables('LAWSConnectionApiId')]"
-                                }
+                            "defaultValue": {},
+                            "type": "Object"
+                        }
+                    },
+                    "triggers": {
+                        "Recurrence": {
+                            "evaluatedRecurrence": {
+                                "frequency": "Day",
+                                "interval": 1
+                            },
+                            "recurrence": {
+                                "frequency": "Day",
+                                "interval": 1
+                            },
+                            "type": "Recurrence"
+                        }
+                    }
+                },
+                "parameters": {
+                    "$connections": {
+                        "value": {
+                            "azureloganalyticsdatacollector": {
+                                "connectionId": "[variables('LAWSConnectionId')]",
+                                "connectionName": "[parameters('LAWSConnectionName')]",
+                                "id": "[variables('LAWSConnectionApiId')]"
+                                    }
                             }
                         }
                     }
