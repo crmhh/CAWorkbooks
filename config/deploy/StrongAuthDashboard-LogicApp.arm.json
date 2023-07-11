@@ -645,7 +645,7 @@
                                     "connectionId": "[variables('LAWSConnectionId')]",
                                     "connectionName": "[parameters('LAWSConnectionName')]",
                                     "id": "[variables('LAWSConnectionApiId')]"
-                                    }
+                                }
                             }
                         }
                     }
