@@ -1,5 +1,5 @@
 $miObject = "object-id-of-your-MI"
-$permissionsToAdd = "User.Read.All", "UserAuthenticationMethod.Read.All", "Group.Read.All"
+$permissionsToAdd = "User.Read.All", "UserAuthenticationMethod.Read.All", "Group.Read.All", "AuditLog.Read.All"
 
 #Graph
 $appId = "00000003-0000-0000-c000-000000000000"

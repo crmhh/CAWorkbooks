@@ -94,7 +94,7 @@
                                             "actions": {
                                                 "Send_Data": {
                                                     "inputs": {
-                                                            "body": "{\n \"id\": \"@{items('For_each_Member')?['id']}\",\n \"upn\": \"@{items('For_each_Member')?['userPrincipalName']}\",\n \"group\": \"@{items('For_each_Group')}\",\n\"groupname\": \"@{body('Parse_JSON_Group')?['displayName']}\",\n \"AuthMethod\": \"@{items('For_each_Auth_Method')?['@odata.type']}\",\n \"UserPrefAuthMethod\": \"@{body('Parse_JSON_Prefs')?['userPreferredMethodForSecondaryAuthentication']}\",\n \"SystemPrefAuthEnabled\": \"@{body('Parse_JSON_Prefs')?['isSystemPreferredAuthenticationMethodEnabled']}\",\n \"SystemPrefAuthMethod\": \"@{body('Parse_JSON_Prefs')?['systemPreferredAuthenticationMethod']}\"\n}",
+                                                        "body": "{\n \"id\": \"@{items('For_each_Member')?['id']}\",\n \"upn\": \"@{items('For_each_Member')?['userPrincipalName']}\",\n \"group\": \"@{items('For_each_Group')}\",\n\"groupname\": \"@{body('Parse_JSON_Group')?['displayName']}\",\n \"AuthMethod\": \"@{items('For_each_Auth_Method')?['@odata.type']}\",\n \"UserPrefAuthMethod\": \"@{body('Parse_JSON_Prefs')?['userPreferredMethodForSecondaryAuthentication']}\",\n \"SystemPrefAuthEnabled\": \"@{body('Parse_JSON_Prefs')?['isSystemPreferredAuthenticationMethodEnabled']}\",\n \"SystemPrefAuthMethod\": \"@{body('Parse_JSON_Prefs')?['systemPreferredAuthenticationMethod']}\",\n\"lastSignInDateTime\": \"@{body('Parse_JSON_-_Last_SignIn')?['signInActivity']?['lastSignInDateTime']}\",\n\"lastNonInteractiveSignInDateTime\": \"@{body('Parse_JSON_-_Last_SignIn')?['signInActivity']?['lastNonInteractiveSignInDateTime']}\"\n}",
                                                         "headers": {
                                                             "Log-Type": "UserGroupCollection"
                                                         },
@@ -117,6 +117,18 @@
                                                 ]
                                             },
                                             "type": "Foreach"
+                                        },
+                                        "HTTP_-_Get_Last_SignIn": {
+                                            "inputs": {
+                                                "authentication": {
+                                                    "audience": "https://graph.microsoft.com",
+                                                    "type": "ManagedServiceIdentity"
+                                                },
+                                                "method": "GET",
+                                                "uri": "https://graph.microsoft.com/beta/users/@{items('For_each_Member')?['id']}?$select=displayName,userPrincipalName,signInActivity"
+                                            },
+                                            "runAfter": {},
+                                            "type": "Http"
                                         },
                                         "HTTP_-_Get_Methods": {
                                             "inputs": {
@@ -143,8 +155,70 @@
                                                 "method": "GET",
                                                 "uri": "https://graph.microsoft.com/beta/users/@{items('For_each_Member')?['userPrincipalName']}/authentication/signInPreferences"
                                             },
-                                            "runAfter": {},
+                                            "runAfter": {
+                                                "Parse_JSON_-_Last_SignIn": [
+                                                    "Succeeded"
+                                                ]
+                                            },
                                             "type": "Http"
+                                        },
+                                        "Parse_JSON_-_Last_SignIn": {
+                                            "inputs": {
+                                                "content": "@body('HTTP_-_Get_Last_SignIn')",
+                                                "schema": {
+                                                    "properties": {
+                                                        "@@odata.context": {
+                                                            "type": "string"
+                                                        },
+                                                        "value": {
+                                                            "items": {
+                                                                "properties": {
+                                                                    "displayName": {
+                                                                        "type": "string"
+                                                                    },
+                                                                    "id": {
+                                                                        "type": "string"
+                                                                    },
+                                                                    "signInActivity": {
+                                                                        "properties": {
+                                                                            "lastNonInteractiveSignInDateTime": {
+                                                                                "type": "string"
+                                                                            },
+                                                                            "lastNonInteractiveSignInRequestId": {
+                                                                                "type": "string"
+                                                                            },
+                                                                            "lastSignInDateTime": {
+                                                                                "type": "string"
+                                                                            },
+                                                                            "lastSignInRequestId": {
+                                                                                "type": "string"
+                                                                            }
+                                                                        },
+                                                                        "type": "object"
+                                                                    },
+                                                                    "userPrincipalName": {
+                                                                        "type": "string"
+                                                                    }
+                                                                },
+                                                                "required": [
+                                                                    "displayName",
+                                                                    "userPrincipalName",
+                                                                    "id"
+                                                                ],
+                                                                "type": "object"
+                                                            },
+                                                            "type": "array"
+                                                        }
+                                                    },
+                                                    "type": "object"
+                                                }
+                                            },
+                                            "runAfter": {
+                                                "HTTP_-_Get_Last_SignIn": [
+                                                    "Succeeded"
+                                                ]
+                                            },
+                                            "type": "ParseJson"
                                         },
                                         "Parse_JSON_Methods": {
                                             "inputs": {
@@ -247,64 +321,64 @@
                                                 "content": "@body('HTTP_-_Get_Prefs')",
                                                 "schema": {
                                                     "properties": {
-                                                            "content": {
-                                                                "properties": {
-                                                        "@@odata.context": {
-                                                            "type": "string"
-                                                        },
-                                                        "isSystemPreferredAuthenticationMethodEnabled": {
-                                                            "type": "boolean"
-                                                        },
-                                                        "systemPreferredAuthenticationMethod": {},
-                                                                    "userPreferredMethodForSecondaryAuthentication": {}
+                                                        "content": {
+                                                            "properties": {
+                                                                "@@odata.context": {
+                                                                    "type": "string"
                                                                 },
-                                                                "type": "object"
+                                                                "isSystemPreferredAuthenticationMethodEnabled": {
+                                                                    "type": "boolean"
+                                                                },
+                                                                "systemPreferredAuthenticationMethod": {},
+                                                                "userPreferredMethodForSecondaryAuthentication": {}
                                                             },
-                                                            "schema": {
+                                                            "type": "object"
+                                                        },
+                                                        "schema": {
+                                                            "properties": {
                                                                 "properties": {
                                                                     "properties": {
-                                                                        "properties": {
-                                                                            "@@odata.context": {
-                                                                                "properties": {
-                                                                                    "type": {
-                                                                                        "type": "string"
-                                                                                    }
-                                                                                },
-                                                                                "type": "object"
+                                                                        "@@odata.context": {
+                                                                            "properties": {
+                                                                                "type": {
+                                                                                    "type": "string"
+                                                                                }
                                                                             },
-                                                                            "isSystemPreferredAuthenticationMethodEnabled": {
-                                                                                "properties": {
-                                                                                    "type": {
-                                                                                        "type": "string"
-                                                                                    }
-                                                                                },
-                                                                                "type": "object"
+                                                                            "type": "object"
+                                                                        },
+                                                                        "isSystemPreferredAuthenticationMethodEnabled": {
+                                                                            "properties": {
+                                                                                "type": {
+                                                                                    "type": "string"
+                                                                                }
                                                                             },
-                                                                            "systemPreferredAuthenticationMethod": {
-                                                                                "properties": {},
-                                                                                "type": "object"
+                                                                            "type": "object"
+                                                                        },
+                                                                        "systemPreferredAuthenticationMethod": {
+                                                                            "properties": {},
+                                                                            "type": "object"
+                                                                        },
+                                                                        "userPreferredMethodForSecondaryAuthentication": {
+                                                                            "properties": {
+                                                                                "type": {
+                                                                                    "type": "string"
+                                                                                }
                                                                             },
-                                                        "userPreferredMethodForSecondaryAuthentication": {
-                                                                                "properties": {
-                                                                                    "type": {
-                                                            "type": "string"
-                                                        }
-                                                    },
-                                                    "type": "object"
-                                                }
-                                            },
-                                                                        "type": "object"
+                                                                            "type": "object"
+                                                                        }
                                                                     },
-                                                                    "type": {
-                                                            "type": "string"
+                                                                    "type": "object"
+                                                                },
+                                                                "type": {
+                                                                    "type": "string"
+                                                                }
+                                                            },
+                                                            "type": "object"
                                                         }
                                                     },
                                                     "type": "object"
                                                 }
                                             },
-                                                        "type": "object"
-                                                    }
-                                                },
                                             "runAfter": {
                                                 "HTTP_-_Get_Prefs": [
                                                     "Succeeded"
@@ -359,7 +433,7 @@
                                         "content": "@body('HTTP_-_Get_Group_Member')",
                                         "schema": {
                                             "properties": {
-                                                    "body": {
+                                                "body": {
                                                     "properties": {
                                                         "value": {
                                                             "items": {
@@ -382,12 +456,12 @@
                                                                     "id": {
                                                                         "type": "string"
                                                                     },
-                                                                        "jobTitle": {},
+                                                                    "jobTitle": {},
                                                                     "mail": {
                                                                         "type": "string"
                                                                     },
-                                                                        "mobilePhone": {},
-                                                                        "officeLocation": {},
+                                                                    "mobilePhone": {},
+                                                                    "officeLocation": {},
                                                                     "preferredLanguage": {},
                                                                     "surname": {
                                                                         "type": "string"
